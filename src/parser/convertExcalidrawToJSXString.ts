@@ -57,14 +57,12 @@ export const mapExcalidrawElementToHTMLElementString = (
           key=${stringify(element.id)}
             style={${createStyleString(baseStyle)}}
         />`;
-      break;
     case "ellipse":
       return `<div
           key=${stringify(element.id)}
           style={${createStyleString(baseStyle)}}
         />`;
 
-      break;
     case "text":
       return `<span
           key=${stringify(element.id)}

@@ -9,17 +9,14 @@ export const mapExcalidrawElementToHTMLElement = (
   switch (element.type) {
     case "rectangle":
       return <div key={element.id} style={baseStyle} />;
-      break;
     case "ellipse":
       return <div key={element.id} style={baseStyle} />;
-      break;
     case "text":
       return (
         <span key={element.id} style={baseStyle}>
           {element.text}
         </span>
       );
-      break;
     default:
       return null;
   }

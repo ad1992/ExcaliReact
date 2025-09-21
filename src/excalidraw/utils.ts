@@ -1,8 +1,7 @@
 /** This file contains the utility functions which needs to be exported from the project */
 
 import { FONT_FAMILY, ROUNDNESS } from "@excalidraw/excalidraw";
-import type { FONT_FAMILY_FALLBACKS } from "@excalidraw/excalidraw/constants";
-
+import type { FONT_FAMILY_FALLBACKS } from "@excalidraw/excalidraw/common/constants";
 import type {
   ElementsMap,
   ExcalidrawElement,
