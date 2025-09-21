@@ -47,14 +47,14 @@ function App() {
                   Generated React Code
                 </h2>
                 <div className="flex items-center gap-2">
+                  <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
+                    Copy Code
+                  </button>
                   <button
-                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
                     onClick={() => setPreviewReactCode(!previewReactCode)}
                   >
                     {previewReactCode ? "Code" : "Preview"}
-                  </button>
-                  <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
-                    Copy Code
                   </button>
                 </div>
               </div>
