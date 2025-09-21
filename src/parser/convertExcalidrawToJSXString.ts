@@ -1,4 +1,5 @@
 import type { NonDeletedExcalidrawElement } from "@excalidraw/excalidraw/element/types";
+import { getCornerRadius } from "../excalidraw/utils";
 
 /**
  * Stringify the value.
@@ -11,7 +12,7 @@ import type { NonDeletedExcalidrawElement } from "@excalidraw/excalidraw/element
  * eg. null -> ""
  * eg. undefined -> ""
  */
-const stringify = (value: any) => {
+const stringify = (value: unknown) => {
   if (value === null || value === undefined) return "";
   switch (typeof value) {
     case "string":
@@ -47,11 +48,16 @@ const createStyleString = (style: Record<string, unknown>): string => {
 export const mapExcalidrawElementToHTMLElementString = (
   element: NonDeletedExcalidrawElement
 ) => {
+  const borderRadius = getCornerRadius(
+    Math.min(element.width, element.height),
+    element
+  );
   const baseStyleObject = {
     width: element.width,
     height: element.height,
     backgroundColor: element.backgroundColor,
     border: `${element.strokeWidth}px solid ${element.strokeColor}`,
+    borderRadius,
     position: "absolute",
     left: element.x,
     top: element.y,
