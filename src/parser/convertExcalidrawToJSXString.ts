@@ -65,6 +65,13 @@ export const mapExcalidrawElementToHTMLElementString = (
         />`;
 
       break;
+    case "text":
+      return `<span
+          key=${stringify(element.id)}
+          style={${createStyleString(baseStyle)}}
+        >
+          ${element.text}
+        </span>`;
     default:
       return null;
   }

@@ -5,12 +5,20 @@ export const mapExcalidrawElementToHTMLElement = (
   element: NonDeletedExcalidrawElement
 ) => {
   const baseStyle = computeExcalidrawElementStyle(element);
+
   switch (element.type) {
     case "rectangle":
       return <div key={element.id} style={baseStyle} />;
       break;
     case "ellipse":
       return <div key={element.id} style={baseStyle} />;
+      break;
+    case "text":
+      return (
+        <span key={element.id} style={baseStyle}>
+          {element.text}
+        </span>
+      );
       break;
     default:
       return null;
@@ -20,16 +28,8 @@ export const mapExcalidrawElementToHTMLElement = (
 export const convertExcalidrawToJSXElements = (
   elements: readonly NonDeletedExcalidrawElement[]
 ) => {
-  const jsxCode = elements.map((element) =>
+  const jsxElements = elements.map((element) =>
     mapExcalidrawElementToHTMLElement(element)
   );
-  return `import React from react;
-  export const ExcalidrawToReact = () => {
-    return (
-      <>
-        ${jsxCode.join("")}
-      </>
-    );
-  };
-  `;
+  return jsxElements;
 };

@@ -1,6 +1,8 @@
 import type { NonDeletedExcalidrawElement } from "@excalidraw/excalidraw/element/types";
-import { getCornerRadius } from "../excalidraw/utils";
+import { getCornerRadius, getFontString } from "../excalidraw/utils";
 import type { CSSProperties } from "react";
+import { VERTICAL_ALIGN } from "../excalidraw/constants";
+import { FONT_FAMILY } from "@excalidraw/excalidraw";
 
 /**
  * Compute the style of an Excalidraw element.
@@ -43,6 +45,19 @@ export const computeExcalidrawElementStyle = (
       return baseStyle;
     case "ellipse":
       return { ...baseStyle, borderRadius: "50%" };
+    case "text":
+      return {
+        ...baseStyle,
+        border: "none",
+        backgroundColor: "transparent",
+        font: getFontString({
+          fontSize: element.fontSize ?? 16,
+          fontFamily: element.fontFamily ?? FONT_FAMILY.Arial,
+        }),
+        color: element.strokeColor ?? "black",
+        textAlign: element.textAlign as CSSProperties["textAlign"],
+        verticalAlign: element.verticalAlign ?? VERTICAL_ALIGN.TOP,
+      };
     default:
       return baseStyle;
   }
