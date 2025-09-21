@@ -1,47 +1,16 @@
 import type { NonDeletedExcalidrawElement } from "@excalidraw/excalidraw/element/types";
-import { getCornerRadius } from "../excalidraw/utils";
+import { computeExcalidrawElementStyle } from "./utils";
 
 export const mapExcalidrawElementToHTMLElement = (
   element: NonDeletedExcalidrawElement
 ) => {
-  const borderRadius = getCornerRadius(
-    Math.min(element.width, element.height),
-    element
-  );
+  const baseStyle = computeExcalidrawElementStyle(element);
   switch (element.type) {
     case "rectangle":
-      return (
-        <div
-          key={element.id}
-          style={{
-            width: element.width,
-            height: element.height,
-            backgroundColor: element.backgroundColor,
-            borderRadius,
-            border: `${element.strokeWidth}px solid ${element.strokeColor}`,
-            position: "absolute",
-            left: element.x,
-            top: element.y,
-          }}
-        />
-      );
+      return <div key={element.id} style={baseStyle} />;
       break;
     case "ellipse":
-      return (
-        <div
-          key={element.id}
-          style={{
-            width: element.width,
-            height: element.height,
-            backgroundColor: element.backgroundColor,
-            borderRadius,
-            border: `${element.strokeWidth}px solid ${element.strokeColor}`,
-            position: "absolute",
-            left: element.x,
-            top: element.y,
-          }}
-        />
-      );
+      return <div key={element.id} style={baseStyle} />;
       break;
     default:
       return null;

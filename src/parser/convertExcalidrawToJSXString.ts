@@ -1,5 +1,6 @@
 import type { NonDeletedExcalidrawElement } from "@excalidraw/excalidraw/element/types";
-import { getCornerRadius } from "../excalidraw/utils";
+import { computeExcalidrawElementStyle } from "./utils";
+import type { CSSProperties } from "react";
 
 /**
  * Stringify the value.
@@ -32,7 +33,7 @@ const stringify = (value: unknown) => {
  * @returns The style string.
  * eg. { width: 100, height: 100, backgroundColor: "red" } -> { width: 100, height: 100, backgroundColor: "red" }
  */
-const createStyleString = (style: Record<string, unknown>): string => {
+const createStyleString = (style: CSSProperties): string => {
   const styleEntries = Object.entries(style)
     .filter(([, value]) => value !== undefined && value !== null)
     .map(([key, value]) => `${key}: ${stringify(value)}`);
@@ -48,32 +49,19 @@ const createStyleString = (style: Record<string, unknown>): string => {
 export const mapExcalidrawElementToHTMLElementString = (
   element: NonDeletedExcalidrawElement
 ) => {
-  const borderRadius = getCornerRadius(
-    Math.min(element.width, element.height),
-    element
-  );
-  const baseStyleObject = {
-    width: element.width,
-    height: element.height,
-    backgroundColor: element.backgroundColor,
-    border: `${element.strokeWidth}px solid ${element.strokeColor}`,
-    borderRadius,
-    position: "absolute",
-    left: element.x,
-    top: element.y,
-  };
+  const baseStyle = computeExcalidrawElementStyle(element);
 
   switch (element.type) {
     case "rectangle":
       return `<div
           key=${stringify(element.id)}
-            style={${createStyleString(baseStyleObject)}}
+            style={${createStyleString(baseStyle)}}
         />`;
       break;
     case "ellipse":
       return `<div
           key=${stringify(element.id)}
-          style={${createStyleString(baseStyleObject)}}
+          style={${createStyleString(baseStyle)}}
         />`;
 
       break;
