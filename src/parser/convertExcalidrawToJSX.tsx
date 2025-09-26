@@ -12,6 +12,27 @@ export const mapExcalidrawElementToHTMLElement = (
     case "ellipse":
       return <div key={element.id} style={baseStyle} />;
     case "text":
+      if (element.text.startsWith("btn-")) {
+        const btnText = element.text.split("btn-")[1];
+        return (
+          <button
+            key={element.id}
+            style={baseStyle}
+            onClick={() => alert(`You clicked on ${btnText}`)}
+          >
+            {btnText}
+          </button>
+        );
+      }
+
+      if (element.text.startsWith("link-")) {
+        const linkText = element.text.split("link-")[1];
+        return (
+          <a key={element.id} style={baseStyle} href={linkText} target="_blank">
+            {linkText}
+          </a>
+        );
+      }
       return (
         <span key={element.id} style={baseStyle}>
           {element.text}

@@ -64,6 +64,27 @@ export const mapExcalidrawElementToHTMLElementString = (
         />`;
 
     case "text":
+      if (element.text.startsWith("btn-")) {
+        const btnText = element.text.split("btn-")[1];
+        return `<button
+          key=${stringify(element.id)}
+          style={${createStyleString(baseStyle)}}
+          onClick={() => alert("You clicked on ${btnText}")}
+        >
+          ${btnText}
+        </button>`;
+      }
+      if (element.text.startsWith("link-")) {
+        const linkText = element.text.split("link-")[1];
+        return `<a
+          key=${stringify(element.id)}
+          style={${createStyleString(baseStyle)}}
+          href=${linkText}
+          target="_blank"
+        >
+          ${linkText}
+        </a>`;
+      }
       return `<span
           key=${stringify(element.id)}
           style={${createStyleString(baseStyle)}}
