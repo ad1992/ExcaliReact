@@ -1,5 +1,4 @@
 export const initialData = {
-  type: "excalidraw/clipboard",
   elements: [
     {
       id: "-dSEuVljO4HOBWt-VSeZk",

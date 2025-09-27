@@ -17,7 +17,7 @@ import type { UIElementType } from "./types";
 export const mapExcalidrawElementToHTMLElement = (
   element: NonDeletedExcalidrawElement,
   elementsMap: ElementsMap
-) => {
+): React.ReactNode => {
   const boundTextElement = getBoundTextElement(element, elementsMap);
   const boundTextBaseStyle = boundTextElement
     ? computeBoundTextElementStyle(boundTextElement)
@@ -35,7 +35,10 @@ export const mapExcalidrawElementToHTMLElement = (
           <button
             key={element.id}
             style={baseStyle}
-            onClick={() => alert(`You clicked on ${boundTextElement?.text}`)}
+            name={boundTextElement?.text}
+            onClick={(event: React.MouseEvent<HTMLButtonElement>) =>
+              alert(`You clicked on ${event.currentTarget.name}`)
+            }
           >
             <span key={boundTextElement?.id} style={boundTextBaseStyle}>
               {boundTextElement?.text}
@@ -78,7 +81,7 @@ export const mapExcalidrawElementToHTMLElement = (
       case "text": {
         const container = getContainerElement(element, elementsMap);
         if (container) {
-          return;
+          return null;
         }
         return (
           <span key={element.id} style={baseStyle}>
