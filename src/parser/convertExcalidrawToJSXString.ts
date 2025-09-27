@@ -1,6 +1,18 @@
-import type { NonDeletedExcalidrawElement } from "@excalidraw/excalidraw/element/types";
-import { computeExcalidrawElementStyle } from "./utils";
+import type {
+  ElementsMap,
+  NonDeletedExcalidrawElement,
+} from "@excalidraw/excalidraw/element/types";
+import {
+  computeBoundTextElementStyle,
+  computeExcalidrawElementStyle,
+} from "./utils";
 import type { CSSProperties } from "react";
+import {
+  getBoundTextElement,
+  getContainerElement,
+  getElementsMap,
+} from "../excalidraw/utils";
+import type { UIElementType } from "./types";
 
 /**
  * Stringify the value.
@@ -47,66 +59,117 @@ const createStyleString = (style: CSSProperties): string => {
  * @returns The JSX string.
  */
 export const mapExcalidrawElementToHTMLElementString = (
-  element: NonDeletedExcalidrawElement
+  element: NonDeletedExcalidrawElement,
+  elementsMap: ElementsMap
 ) => {
   const baseStyle = computeExcalidrawElementStyle(element);
+  const boundTextElement = getBoundTextElement(element, elementsMap);
+  const boundTextBaseStyle = boundTextElement
+    ? computeBoundTextElementStyle(boundTextElement)
+    : {};
 
-  switch (element.type) {
-    case "rectangle":
-      return `<div
-          key=${stringify(element.id)}
-            style={${createStyleString(baseStyle)}}
-        />`;
-    case "ellipse":
-      return `<div
-          key=${stringify(element.id)}
-          style={${createStyleString(baseStyle)}}
-        />`;
-
-    case "text":
-      if (element.text.startsWith("btn-")) {
-        const btnText = element.text.split("btn-")[1];
+  if (element.customData?.type) {
+    const customType = element.customData?.type as UIElementType["type"];
+    switch (customType) {
+      case "button":
         return `<button
-          key=${stringify(element.id)}
-          style={${createStyleString(baseStyle)}}
-          onClick={() => alert("You clicked on ${btnText}")}
-        >
-          ${btnText}
-        </button>`;
-      }
-      if (element.text.startsWith("link-")) {
-        const linkText = element.text.split("link-")[1];
+            key=${stringify(element.id)}
+            style={${createStyleString(baseStyle)}}
+            onClick={() => alert("You clicked on ${boundTextElement?.text}")}
+          >
+            ${
+              boundTextElement &&
+              `<span
+              key=${stringify(boundTextElement?.id)}
+              style={${createStyleString(boundTextBaseStyle)}}
+            >
+            ${boundTextElement?.text}
+            </span>`
+            }
+          </button>`;
+      case "input":
+        return `<input
+            key=${stringify(element.id)}
+            style={${createStyleString(baseStyle)}}
+          />`;
+      case "link":
         return `<a
+            key=${stringify(element.id)}
+            style={${createStyleString(baseStyle)}}
+          >
+            ${
+              boundTextElement &&
+              `<span
+              key=${stringify(boundTextElement?.id)}
+              style={${createStyleString(boundTextBaseStyle)}}
+            >
+            ${boundTextElement?.text}
+            </span>`
+            }
+          </a>`;
+    }
+  } else {
+    switch (element.type) {
+      case "rectangle":
+        return `<div
           key=${stringify(element.id)}
           style={${createStyleString(baseStyle)}}
-          href=${linkText}
-          target="_blank"
+        > 
+          ${
+            boundTextElement &&
+            `<span
+            key=${stringify(boundTextElement?.id)}
+            style={${createStyleString(boundTextBaseStyle)}}
+          >
+            ${boundTextElement?.text}
+          </span>`
+          }
+        </div>`;
+      case "ellipse":
+        return `<div
+          key=${stringify(element.id)}
+          style={${createStyleString(baseStyle)}}
         >
-          ${linkText}
-        </a>`;
-      }
-      return `<span
+          ${
+            boundTextElement &&
+            `<span
+            key=${stringify(boundTextElement?.id)}
+            style={${createStyleString(boundTextBaseStyle)}}
+          >
+            ${boundTextElement?.text}
+          </span>`
+          }
+        </div>`;
+      case "text": {
+        const container = getContainerElement(element, elementsMap);
+        if (container) {
+          return;
+        }
+        return `<span
           key=${stringify(element.id)}
           style={${createStyleString(baseStyle)}}
         >
           ${element.text}
         </span>`;
-    default:
-      return null;
+      }
+      default:
+        return null;
+    }
   }
 };
 
 export const convertExcalidrawToJSXString = (
   elements: readonly NonDeletedExcalidrawElement[]
 ) => {
-  const jsxCode = elements.map((element) =>
-    mapExcalidrawElementToHTMLElementString(element)
+  const elementsMap = getElementsMap(elements);
+  const jsxStrings = elements.map((element) =>
+    mapExcalidrawElementToHTMLElementString(element, elementsMap)
   );
   return `import React from react;
   export const ExcalidrawToReact = () => {
     return (
       <>
-        ${jsxCode.join("\n")}
+        ${jsxStrings.join("\n")}
       </>
     );
   };

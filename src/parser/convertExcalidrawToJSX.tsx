@@ -6,16 +6,13 @@ import {
   computeBoundTextElementStyle,
   computeExcalidrawElementStyle,
 } from "./utils";
-import type { UIElement } from "../UIElementsDropdown";
 import {
   getBoundTextElement,
   getContainerElement,
   getElementsMap,
 } from "../excalidraw/utils";
+import type { UIElementType } from "./types";
 
-interface UIElementType {
-  type: "rectangle" | "ellipse" | "text" | UIElement;
-}
 export const mapExcalidrawElementToHTMLElement = (
   element: NonDeletedExcalidrawElement,
   elementsMap: ElementsMap

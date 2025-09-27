@@ -41,10 +41,7 @@ function App() {
   ) => {
     if (!selectedUIElement || !excalidrawAPI) return;
     let customElement: ExcalidrawElementSkeleton | null = null;
-    console.log(
-      activeTool.customType === UIElement.BUTTON,
-      "active tool custom type"
-    );
+
     if (activeTool.type === "custom") {
       switch (activeTool.customType) {
         case UIElement.BUTTON:
@@ -70,7 +67,6 @@ function App() {
       ]);
       const elements = excalidrawAPI.getSceneElements();
       const appState = excalidrawAPI.getAppState();
-      console.log(customExcalidrawElements, "custom excalidraw elements");
       excalidrawAPI.updateScene({
         elements: [...elements, ...customExcalidrawElements],
         appState: {
