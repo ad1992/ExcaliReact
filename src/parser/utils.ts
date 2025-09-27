@@ -71,6 +71,8 @@ export const computeBoundTextElementStyle = (
   baseStyle.left = undefined;
   baseStyle.top = undefined;
   baseStyle.position = undefined;
+  baseStyle.width = undefined;
+  baseStyle.height = undefined;
   return {
     ...baseStyle,
     border: "none",
