@@ -1,53 +1,102 @@
-import type { NonDeletedExcalidrawElement } from "@excalidraw/excalidraw/element/types";
-import { computeExcalidrawElementStyle } from "./utils";
+import type {
+  ElementsMap,
+  NonDeletedExcalidrawElement,
+} from "@excalidraw/excalidraw/element/types";
+import {
+  computeBoundTextElementStyle,
+  computeExcalidrawElementStyle,
+} from "./utils";
+import type { UIElement } from "../UIElementsDropdown";
+import {
+  getBoundTextElement,
+  getContainerElement,
+  getElementsMap,
+} from "../excalidraw/utils";
 
+interface UIElementType {
+  type: "rectangle" | "ellipse" | "text" | UIElement;
+}
 export const mapExcalidrawElementToHTMLElement = (
-  element: NonDeletedExcalidrawElement
+  element: NonDeletedExcalidrawElement,
+  elementsMap: ElementsMap
 ) => {
   const baseStyle = computeExcalidrawElementStyle(element);
+  const boundTextElement = getBoundTextElement(element, elementsMap);
+  const boundTextBaseStyle = boundTextElement
+    ? computeBoundTextElementStyle(boundTextElement)
+    : {};
+  if (element.customData?.type) {
+    const customType = element.customData?.type as UIElementType["type"];
 
-  switch (element.type) {
-    case "rectangle":
-      return <div key={element.id} style={baseStyle} />;
-    case "ellipse":
-      return <div key={element.id} style={baseStyle} />;
-    case "text":
-      if (element.text.startsWith("btn-")) {
-        const btnText = element.text.split("btn-")[1];
+    switch (customType) {
+      case "button": {
         return (
           <button
             key={element.id}
             style={baseStyle}
-            onClick={() => alert(`You clicked on ${btnText}`)}
+            onClick={() => alert(`You clicked on ${boundTextElement?.text}`)}
           >
-            {btnText}
+            <span key={boundTextElement?.id} style={boundTextBaseStyle}>
+              {boundTextElement?.text}
+            </span>
           </button>
         );
       }
-
-      if (element.text.startsWith("link-")) {
-        const linkText = element.text.split("link-")[1];
+      case "input":
+        return <input key={element.id} style={baseStyle} />;
+      case "link":
         return (
-          <a key={element.id} style={baseStyle} href={linkText} target="_blank">
-            {linkText}
+          <a
+            key={element.id}
+            style={baseStyle}
+            href={boundTextElement?.text}
+            target="_blank"
+          >
+            {boundTextElement?.text}
           </a>
         );
+    }
+  } else {
+    switch (element.type) {
+      case "rectangle":
+        return (
+          <div key={element.id} style={baseStyle}>
+            <span key={boundTextElement?.id} style={boundTextBaseStyle}>
+              {boundTextElement?.text}
+            </span>
+          </div>
+        );
+      case "ellipse":
+        return (
+          <div key={element.id} style={baseStyle}>
+            <span key={boundTextElement?.id} style={boundTextBaseStyle}>
+              {boundTextElement?.text}
+            </span>
+          </div>
+        );
+      case "text": {
+        const container = getContainerElement(element, elementsMap);
+        if (container) {
+          return;
+        }
+        return (
+          <span key={element.id} style={baseStyle}>
+            {element.text}
+          </span>
+        );
       }
-      return (
-        <span key={element.id} style={baseStyle}>
-          {element.text}
-        </span>
-      );
-    default:
-      return null;
+      default:
+        return null;
+    }
   }
 };
 
 export const convertExcalidrawToJSXElements = (
   elements: readonly NonDeletedExcalidrawElement[]
 ) => {
+  const elementsMap = getElementsMap(elements);
   const jsxElements = elements.map((element) =>
-    mapExcalidrawElementToHTMLElement(element)
+    mapExcalidrawElementToHTMLElement(element, elementsMap)
   );
   return jsxElements;
 };

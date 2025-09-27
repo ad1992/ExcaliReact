@@ -63,3 +63,17 @@ export const computeExcalidrawElementStyle = (
   }
   return baseStyle;
 };
+
+export const computeBoundTextElementStyle = (
+  element: NonDeletedExcalidrawElement
+) => {
+  const baseStyle = computeExcalidrawElementStyle(element);
+  baseStyle.left = undefined;
+  baseStyle.top = undefined;
+  baseStyle.position = undefined;
+  return {
+    ...baseStyle,
+    border: "none",
+    backgroundColor: "transparent",
+  };
+};

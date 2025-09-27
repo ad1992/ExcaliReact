@@ -1,15 +1,86 @@
 import "./App.css";
-import { Excalidraw } from "@excalidraw/excalidraw";
+import {
+  convertToExcalidrawElements,
+  Excalidraw,
+  Footer,
+} from "@excalidraw/excalidraw";
 import "@excalidraw/excalidraw/index.css";
 import { useState } from "react";
 import { CodePreview } from "./CodePreview";
 import { useExcalidraw } from "./excalidraw/hooks";
 import { CodeEditor } from "./CodeEditor";
+import { UIElement, UIElementsDropdown } from "./UIElementsDropdown";
+import type {
+  ActiveTool,
+  PointerDownState,
+} from "@excalidraw/excalidraw/types";
+import type { ExcalidrawElementSkeleton } from "@excalidraw/excalidraw/data/transform";
 
 function App() {
-  const { setExcalidrawAPI } = useExcalidraw();
+  const { excalidrawAPI, setExcalidrawAPI } = useExcalidraw();
   const [previewReactCode, setPreviewReactCode] = useState<boolean>(false);
   const [showCodePanel, setShowCodePanel] = useState<boolean>(false);
+
+  const [selectedUIElement, setSelectedUIElement] = useState<UIElement | null>(
+    null
+  );
+  const handleUIElementSelect = (uiElement: UIElement) => {
+    if (!excalidrawAPI) return;
+    excalidrawAPI.setActiveTool({
+      type: "custom",
+      customType: uiElement,
+    });
+
+    setSelectedUIElement(uiElement);
+  };
+
+  const onPointerDown = (
+    activeTool: ActiveTool,
+    pointerDownState: PointerDownState
+  ) => {
+    if (!selectedUIElement || !excalidrawAPI) return;
+    let customElement: ExcalidrawElementSkeleton | null = null;
+    console.log(
+      activeTool.customType === UIElement.BUTTON,
+      "active tool custom type"
+    );
+    if (activeTool.type === "custom") {
+      switch (activeTool.customType) {
+        case UIElement.BUTTON:
+        case UIElement.INPUT:
+          customElement = {
+            type: "rectangle",
+            x: pointerDownState.origin.x,
+            y: pointerDownState.origin.y,
+            width: 100,
+            height: 30,
+            customData: {
+              type: activeTool.customType,
+            },
+          };
+          break;
+
+        default:
+          break;
+      }
+      if (!customElement) return;
+      const customExcalidrawElements = convertToExcalidrawElements([
+        customElement,
+      ]);
+      const elements = excalidrawAPI.getSceneElements();
+      const appState = excalidrawAPI.getAppState();
+      console.log(customExcalidrawElements, "custom excalidraw elements");
+      excalidrawAPI.updateScene({
+        elements: [...elements, ...customExcalidrawElements],
+        appState: {
+          ...appState,
+          selectedElementIds: {
+            [customExcalidrawElements[0].id]: true,
+          },
+        },
+      });
+    }
+  };
 
   return (
     <div className="h-screen flex flex-col bg-gray-50">
@@ -36,7 +107,14 @@ function App() {
             </button>
           </div>
           <div className="flex-1">
-            <Excalidraw excalidrawAPI={(api) => setExcalidrawAPI(api)} />
+            <Excalidraw
+              excalidrawAPI={(api) => setExcalidrawAPI(api)}
+              onPointerDown={onPointerDown}
+            >
+              <Footer>
+                <UIElementsDropdown onSelect={handleUIElementSelect} />
+              </Footer>
+            </Excalidraw>
           </div>
         </div>
         {showCodePanel && (

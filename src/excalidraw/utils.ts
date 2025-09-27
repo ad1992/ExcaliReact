@@ -5,9 +5,12 @@ import type { FONT_FAMILY_FALLBACKS } from "@excalidraw/excalidraw/common/consta
 import type {
   ElementsMap,
   ExcalidrawElement,
+  ExcalidrawTextContainer,
+  ExcalidrawTextElement,
   ExcalidrawTextElementWithContainer,
   FontFamilyValues,
   FontString,
+  NonDeletedExcalidrawElement,
 } from "@excalidraw/excalidraw/element/types";
 import {
   CJK_HAND_DRAWN_FALLBACK_FONT,
@@ -119,4 +122,38 @@ export const getFontString = ({
   fontFamily: FontFamilyValues;
 }) => {
   return `${fontSize}px ${getFontFamilyString({ fontFamily })}` as FontString;
+};
+
+/**
+ * Get the elements map from the elements.
+ * @param elements - The elements to get the map from.
+ * @returns The elements map.
+ */
+export const getElementsMap = (
+  elements: readonly NonDeletedExcalidrawElement[]
+): ElementsMap => {
+  return elements.reduce((acc, element) => {
+    acc.set(element.id, element);
+    return acc;
+  }, new Map<string, NonDeletedExcalidrawElement>());
+};
+
+/**
+ * Get the container element from the element.
+ * @param element - The element to get the container from.
+ * @param elementsMap - The elements map.
+ * @returns The container element.
+ */
+export const getContainerElement = (
+  element: ExcalidrawTextElement | null,
+  elementsMap: ElementsMap
+): ExcalidrawTextContainer | null => {
+  if (!element) {
+    return null;
+  }
+  if (element.containerId) {
+    return (elementsMap.get(element.containerId) ||
+      null) as ExcalidrawTextContainer | null;
+  }
+  return null;
 };
