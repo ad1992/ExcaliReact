@@ -13,6 +13,7 @@
     "@excalidraw/excalidraw": "next",
     "@monaco-editor/react": "^4.7.0",
     "@tailwindcss/vite": "^4.1.13",
+    "monaco-editor": "^0.53.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-element-to-jsx-string": "^17.0.1",

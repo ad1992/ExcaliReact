@@ -14,9 +14,13 @@ export const convertExcalidrawToJSXString = (
       elementsMap
     )
     .filter(Boolean);
-  return `import React from react;
-  export const ExcalidrawToReact = () => {
-    return ${reactElementToJSXString(<>{jsxElements}</>, { showFunctions: true, functionValue: (fn) => fn.toString() })}
-  };
-  `;
+  const jsxcComp = reactElementToJSXString(<>{jsxElements}</>, {
+    showFunctions: true,
+    functionValue: (fn) => fn.toString(),
+  });
+  return `import React from 'react';
+export const ExcalidrawToReact = () => {
+  return ${jsxcComp}
+};
+`;
 };
