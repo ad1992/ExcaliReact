@@ -4,6 +4,7 @@ import type {
 } from "@excalidraw/excalidraw/element/types";
 import {
   computeBoundTextElementStyle,
+  computeContainerElementStyle,
   computeExcalidrawElementStyle,
 } from "./utils";
 import type { CSSProperties } from "react";
@@ -62,11 +63,13 @@ export const mapExcalidrawElementToHTMLElementString = (
   element: NonDeletedExcalidrawElement,
   elementsMap: ElementsMap
 ) => {
-  const baseStyle = computeExcalidrawElementStyle(element);
   const boundTextElement = getBoundTextElement(element, elementsMap);
   const boundTextBaseStyle = boundTextElement
     ? computeBoundTextElementStyle(boundTextElement)
     : {};
+  const baseStyle = boundTextElement
+    ? computeContainerElementStyle(element)
+    : computeExcalidrawElementStyle(element);
 
   if (element.customData?.type) {
     const customType = element.customData?.type as UIElementType["type"];

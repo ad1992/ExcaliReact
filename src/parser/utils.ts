@@ -77,3 +77,14 @@ export const computeBoundTextElementStyle = (
     backgroundColor: "transparent",
   };
 };
+
+export const computeContainerElementStyle = (
+  element: NonDeletedExcalidrawElement
+) => {
+  const baseStyle = computeExcalidrawElementStyle(element);
+  baseStyle.position = "absolute";
+  baseStyle.display = "flex";
+  baseStyle.alignItems = "center";
+  baseStyle.justifyContent = "center";
+  return baseStyle;
+};
