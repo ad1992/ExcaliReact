@@ -15,6 +15,7 @@ import type {
   PointerDownState,
 } from "@excalidraw/excalidraw/types";
 import type { ExcalidrawElementSkeleton } from "@excalidraw/excalidraw/data/transform";
+import { initialData } from "./initialData";
 
 function App() {
   const { excalidrawAPI, setExcalidrawAPI } = useExcalidraw();
@@ -110,6 +111,7 @@ function App() {
             <Excalidraw
               excalidrawAPI={(api) => setExcalidrawAPI(api)}
               onPointerDown={onPointerDown}
+              initialData={initialData}
             >
               <Footer>
                 <UIElementsDropdown onSelect={handleUIElementSelect} />
