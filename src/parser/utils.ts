@@ -67,14 +67,13 @@ export const computeExcalidrawElementStyle = (
 export const computeBoundTextElementStyle = (
   element: NonDeletedExcalidrawElement
 ) => {
-  const baseStyle = computeExcalidrawElementStyle(element);
-  baseStyle.left = undefined;
-  baseStyle.top = undefined;
-  baseStyle.position = undefined;
-  baseStyle.width = undefined;
-  baseStyle.height = undefined;
+  // Destruct left, top, position, width, height as they aren't needed for bound text element
+  // eslint-disable-next-line
+  const { left, top, position, width, height, ...restStyles } =
+    computeExcalidrawElementStyle(element);
+
   return {
-    ...baseStyle,
+    ...restStyles,
     border: "none",
     backgroundColor: "transparent",
   };
