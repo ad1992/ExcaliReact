@@ -9,6 +9,7 @@ import {
   computeExcalidrawElementStyle,
 } from "./utils";
 import type { UIElementType } from "./types";
+import type { GroupNode } from "./buildLayoutTree";
 
 /**
  * Convert an Excalidraw element to an HTML element.
@@ -17,9 +18,28 @@ import type { UIElementType } from "./types";
  * @returns The equivalent HTML element.
  */
 export const excalidrawElementToHTML = (
-  element: NonDeletedExcalidrawElement,
+  element: GroupNode | NonDeletedExcalidrawElement,
   elementsMap: ElementsMap
 ): React.ReactNode => {
+  if (element.type === "group") {
+    return (
+      <div
+        key={element.id}
+        style={{
+          left: element.x,
+          top: element.y,
+          width: element.width,
+          height: element.height,
+          position: "relative",
+        }}
+      >
+        {element.children.map((child) =>
+          excalidrawElementToHTML(child, elementsMap)
+        )}
+      </div>
+    );
+  }
+
   const boundTextElement = getBoundTextElement(element, elementsMap);
   const boundTextBaseStyle = boundTextElement
     ? computeBoundTextElementStyle(boundTextElement)
@@ -49,7 +69,7 @@ export const excalidrawElementToHTML = (
         );
       }
       case "input":
-        return <input key={element.id} style={baseStyle} />;
+        return <input key={element.id} style={baseStyle} id={element.id} />;
       case "link":
         if (element.type !== "text") return null;
         return (
