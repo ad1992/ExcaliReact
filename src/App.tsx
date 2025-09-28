@@ -2,6 +2,7 @@ import "./App.css";
 import {
   convertToExcalidrawElements,
   Excalidraw,
+  FONT_FAMILY,
   Footer,
 } from "@excalidraw/excalidraw";
 import "@excalidraw/excalidraw/index.css";
@@ -57,7 +58,20 @@ function App() {
             },
           };
           break;
-
+        case UIElement.LINK:
+          customElement = {
+            type: "text",
+            x: pointerDownState.origin.x,
+            y: pointerDownState.origin.y,
+            text: "link Text",
+            customData: {
+              type: activeTool.customType,
+            },
+            strokeColor: "#1971c2",
+            fontFamily: FONT_FAMILY["Comic Shanns"],
+            fontSize: 16,
+          };
+          break;
         default:
           break;
       }

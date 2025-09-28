@@ -49,14 +49,15 @@ export const mapExcalidrawElementToHTMLElement = (
       case "input":
         return <input key={element.id} style={baseStyle} />;
       case "link":
+        if (element.type !== "text") return null;
         return (
           <a
             key={element.id}
             style={baseStyle}
-            href={boundTextElement?.text}
+            href={element.text}
             target="_blank"
           >
-            {boundTextElement?.text}
+            {element.text}
           </a>
         );
     }
