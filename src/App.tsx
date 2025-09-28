@@ -1,97 +1,16 @@
 import "./App.css";
-import {
-  convertToExcalidrawElements,
-  Excalidraw,
-  FONT_FAMILY,
-  Footer,
-} from "@excalidraw/excalidraw";
 import "@excalidraw/excalidraw/index.css";
 import { useState } from "react";
-import { CodePreview } from "./CodePreview";
-import { useExcalidraw } from "./excalidraw/hooks";
 import { CodeEditor } from "./CodeEditor";
-import { UIElement, UIElementsDropdown } from "./UIElementsDropdown";
-import type {
-  ActiveTool,
-  PointerDownState,
-} from "@excalidraw/excalidraw/types";
-import type { ExcalidrawElementSkeleton } from "@excalidraw/excalidraw/data/transform";
-import { initialData } from "./initialData";
+
+import { ExcalidrawWrapper } from "./excalidraw/ExcalidrawWrapper";
+import { useExcalidrawElementsToJSX } from "./parser/hooks";
 
 function App() {
-  const { excalidrawAPI, setExcalidrawAPI } = useExcalidraw();
   const [previewReactCode, setPreviewReactCode] = useState<boolean>(false);
   const [showCodePanel, setShowCodePanel] = useState<boolean>(false);
 
-  const [selectedUIElement, setSelectedUIElement] = useState<UIElement | null>(
-    null
-  );
-  const handleUIElementSelect = (uiElement: UIElement) => {
-    if (!excalidrawAPI) return;
-    excalidrawAPI.setActiveTool({
-      type: "custom",
-      customType: uiElement,
-    });
-
-    setSelectedUIElement(uiElement);
-  };
-
-  const onPointerDown = (
-    activeTool: ActiveTool,
-    pointerDownState: PointerDownState
-  ) => {
-    if (!selectedUIElement || !excalidrawAPI) return;
-    let customElement: ExcalidrawElementSkeleton | null = null;
-
-    if (activeTool.type === "custom") {
-      switch (activeTool.customType) {
-        case UIElement.BUTTON:
-        case UIElement.INPUT:
-          customElement = {
-            type: "rectangle",
-            x: pointerDownState.origin.x,
-            y: pointerDownState.origin.y,
-            width: 100,
-            height: 30,
-            customData: {
-              type: activeTool.customType,
-            },
-          };
-          break;
-        case UIElement.LINK:
-          customElement = {
-            type: "text",
-            x: pointerDownState.origin.x,
-            y: pointerDownState.origin.y,
-            text: "link Text",
-            customData: {
-              type: activeTool.customType,
-            },
-            strokeColor: "#1971c2",
-            fontFamily: FONT_FAMILY["Comic Shanns"],
-            fontSize: 16,
-          };
-          break;
-        default:
-          break;
-      }
-      if (!customElement) return;
-      const customExcalidrawElements = convertToExcalidrawElements([
-        customElement,
-      ]);
-      const elements = excalidrawAPI.getSceneElements();
-      const appState = excalidrawAPI.getAppState();
-      excalidrawAPI.updateScene({
-        elements: [...elements, ...customExcalidrawElements],
-        appState: {
-          ...appState,
-          selectedElementIds: {
-            [customExcalidrawElements[0].id]: true,
-          },
-        },
-      });
-    }
-  };
+  const CodePreview = useExcalidrawElementsToJSX();
 
   return (
     <div className="h-screen flex flex-col bg-gray-50">
@@ -118,15 +37,7 @@ function App() {
             </button>
           </div>
           <div className="flex-1">
-            <Excalidraw
-              excalidrawAPI={(api) => setExcalidrawAPI(api)}
-              onPointerDown={onPointerDown}
-              initialData={initialData}
-            >
-              <Footer>
-                <UIElementsDropdown onSelect={handleUIElementSelect} />
-              </Footer>
-            </Excalidraw>
+            <ExcalidrawWrapper />
           </div>
         </div>
         {showCodePanel && (
@@ -149,7 +60,7 @@ function App() {
                 </div>
               </div>
               <div className="flex-1 overflow-auto p-4 relative">
-                {previewReactCode ? <CodePreview /> : <CodeEditor />}
+                {previewReactCode ? CodePreview : <CodeEditor />}
               </div>
             </div>
           </>

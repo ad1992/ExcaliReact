@@ -22,7 +22,13 @@ export const ExcalidrawProvider = ({
   }, [excalidrawAPI]);
 
   const value = useMemo(
-    () => ({ excalidrawAPI, setExcalidrawAPI, elements, updateElements }),
+    () => ({
+      excalidrawAPI,
+      setExcalidrawAPI,
+      elements,
+      setElements,
+      updateElements,
+    }),
     [excalidrawAPI, elements, updateElements]
   );
   return (

@@ -1,6 +1,6 @@
 import { Editor } from "@monaco-editor/react";
 import { useExcalidraw } from "./excalidraw/hooks";
-import { convertExcalidrawToJSXString } from "./parser/convertExcalidrawToJSXString";
+import { useExcalidrawToJSXString } from "./parser/hooks";
 import * as monaco from "monaco-editor";
 export const CodeEditor = () => {
   const { excalidrawAPI } = useExcalidraw();
@@ -28,11 +28,9 @@ export const CodeEditor = () => {
       "file:///node_modules/@types/react/index.d.ts"
     );
   };
+  const jsxCode = useExcalidrawToJSXString();
 
   if (!excalidrawAPI) return null;
-  const jsxCode = convertExcalidrawToJSXString(
-    excalidrawAPI.getSceneElements()
-  );
 
   return (
     <Editor

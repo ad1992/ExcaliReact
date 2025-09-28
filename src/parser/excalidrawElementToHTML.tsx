@@ -2,19 +2,21 @@ import type {
   ElementsMap,
   NonDeletedExcalidrawElement,
 } from "@excalidraw/excalidraw/element/types";
+import { getBoundTextElement, getContainerElement } from "../excalidraw/utils";
 import {
   computeBoundTextElementStyle,
   computeContainerElementStyle,
   computeExcalidrawElementStyle,
 } from "./utils";
-import {
-  getBoundTextElement,
-  getContainerElement,
-  getElementsMap,
-} from "../excalidraw/utils";
 import type { UIElementType } from "./types";
 
-export const mapExcalidrawElementToHTMLElement = (
+/**
+ * Convert an Excalidraw element to an HTML element.
+ * @param element The Excalidraw element to convert.
+ * @param elementsMap The elements map.
+ * @returns The equivalent HTML element.
+ */
+export const excalidrawElementToHTML = (
   element: NonDeletedExcalidrawElement,
   elementsMap: ElementsMap
 ): React.ReactNode => {
@@ -94,14 +96,4 @@ export const mapExcalidrawElementToHTMLElement = (
         return null;
     }
   }
-};
-
-export const convertExcalidrawToJSXElements = (
-  elements: readonly NonDeletedExcalidrawElement[]
-) => {
-  const elementsMap = getElementsMap(elements);
-  const jsxElements = elements.map((element) =>
-    mapExcalidrawElementToHTMLElement(element, elementsMap)
-  );
-  return jsxElements;
 };

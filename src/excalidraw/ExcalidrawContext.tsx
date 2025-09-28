@@ -6,10 +6,12 @@ export const ExcalidrawContext = createContext<{
   excalidrawAPI: ExcalidrawImperativeAPI | null;
   setExcalidrawAPI: (excalidrawAPI: ExcalidrawImperativeAPI) => void;
   elements: readonly NonDeletedExcalidrawElement[];
+  setElements: (elements: readonly NonDeletedExcalidrawElement[]) => void;
   updateElements: (elements: NonDeletedExcalidrawElement[]) => void;
 }>({
   excalidrawAPI: null,
   elements: [],
+  setElements: () => {},
   updateElements: () => {},
   setExcalidrawAPI: () => {},
 });
