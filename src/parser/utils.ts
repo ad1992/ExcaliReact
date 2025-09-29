@@ -61,7 +61,6 @@ export const computeExcalidrawElementStyle = (
     default:
       return baseStyle;
   }
-  return baseStyle;
 };
 
 export const computeBoundTextElementStyle = (
@@ -83,13 +82,23 @@ export const computeContainerElementStyle = (
   element: NonDeletedExcalidrawElement
 ) => {
   const baseStyle = computeExcalidrawElementStyle(element);
-  baseStyle.position = "absolute";
   baseStyle.display = "flex";
   baseStyle.alignItems = "center";
   baseStyle.justifyContent = "center";
   return baseStyle;
 };
 
+export const computeFrameElementStyle = (
+  element: NonDeletedExcalidrawElement
+): CSSProperties => {
+  return {
+    position: "relative",
+    marginLeft: element.x,
+    marginTop: element.y,
+    width: element.width,
+    height: element.height,
+  };
+};
 /**
  * Stringify the value.
  * @param value - The value to stringify.

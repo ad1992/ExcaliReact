@@ -12,6 +12,16 @@ export interface GroupNode {
 export const buildLayoutTree = (
   elements: readonly NonDeletedExcalidrawElement[]
 ) => {
+  if (elements.length === 0) {
+    return [];
+  }
+
+  const frame = elements.find((element) => element.type === "frame");
+  if (!frame) {
+    alert("Frame not found");
+    return [];
+  }
+
   const rootNodes = [];
 
   const groupMap: Record<string, GroupNode> = {};
@@ -80,8 +90,37 @@ export const buildLayoutTree = (
           node.children[childIndex] = updatedChild;
         }
       }
+
+      // Sort the children by y and x
+      node.children.sort((a, b) => {
+        if (Math.abs(a.y - b.y) < 10) {
+          return a.x - b.x; // same row → left-to-right
+        }
+        return a.y - b.y; // otherwise top-to-bottom
+      });
     }
   }
+
+  // Normalize the root nodes with respect to the frame
+  for (const node of rootNodes) {
+    const updatedNode = {
+      ...node,
+      x: node.x - frame.x,
+      y: node.y - frame.y,
+    };
+    const nodeIndex = rootNodes.indexOf(node);
+    rootNodes[nodeIndex] = updatedNode;
+  }
+
+  // Sort the nodes based on the position so its placed in correct order
+  // in the DOM
+  rootNodes.sort((a, b) => {
+    if (Math.abs(a.y - b.y) < 10) {
+      return a.x - b.x; // same row → left-to-right
+    }
+    return a.y - b.y; // otherwise top-to-bottom
+  });
+
   return rootNodes;
 };
 
