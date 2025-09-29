@@ -8,8 +8,7 @@ import {
   computeContainerElementStyle,
   computeExcalidrawElementStyle,
 } from "./utils";
-import type { UIElementType } from "./types";
-import type { GroupNode } from "./buildLayoutTree";
+import type { GroupNode, UIElementType } from "./types";
 
 /**
  * Convert an Excalidraw element to an HTML element.

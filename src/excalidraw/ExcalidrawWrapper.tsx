@@ -4,7 +4,7 @@ import {
   FONT_FAMILY,
   Footer,
 } from "@excalidraw/excalidraw";
-import { UIElement, UIElementsDropdown } from "../UIElementsDropdown";
+import { UIElementsDropdown } from "../UIElementsDropdown";
 import type { ExcalidrawElementSkeleton } from "@excalidraw/excalidraw/data/transform";
 import type {
   ActiveTool,
@@ -14,6 +14,7 @@ import { initialData } from "../initialData";
 import { useExcalidraw } from "./hooks";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { NonDeletedExcalidrawElement } from "@excalidraw/excalidraw/element/types";
+import type { UIElement } from "../types";
 
 export const ExcalidrawWrapper = () => {
   const { excalidrawAPI, setExcalidrawAPI, elements, setElements } =

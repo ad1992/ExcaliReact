@@ -1,4 +1,5 @@
 import type { NonDeletedExcalidrawElement } from "@excalidraw/excalidraw/element/types";
+import type { UIElement } from "../types";
 
 export interface UIElementType {
   type: "rectangle" | "ellipse" | "text" | UIElement;
