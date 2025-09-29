@@ -1,14 +1,7 @@
 import type { NonDeletedExcalidrawElement } from "@excalidraw/excalidraw/element/types";
+import { normalizeElement } from "./utils";
+import type { GroupNode } from "./types";
 
-export interface GroupNode {
-  id: string;
-  type: "group";
-  children: (GroupNode | NonDeletedExcalidrawElement)[];
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
 export const buildLayoutTree = (
   elements: readonly NonDeletedExcalidrawElement[]
 ) => {
@@ -46,7 +39,7 @@ export const buildLayoutTree = (
   for (const element of elements) {
     // If element is not part of any group, add it to the root nodes
     if (element.groupIds.length === 0) {
-      rootNodes.push(element);
+      rootNodes.push(normalizeElement(element));
       continue;
     } else {
       // Start from outermost group and add the element to the group node
@@ -65,7 +58,7 @@ export const buildLayoutTree = (
       }
       // Add the element to the innermost group
       if (!parentGroup.children.includes(element)) {
-        parentGroup.children.push(element);
+        parentGroup.children.push(normalizeElement(element));
       }
     }
   }
@@ -105,8 +98,8 @@ export const buildLayoutTree = (
   for (const node of rootNodes) {
     const updatedNode = {
       ...node,
-      x: node.x - frame.x,
-      y: node.y - frame.y,
+      x: Math.round(node.x - frame.x),
+      y: Math.round(node.y - frame.y),
     };
     const nodeIndex = rootNodes.indexOf(node);
     rootNodes[nodeIndex] = updatedNode;
@@ -120,7 +113,7 @@ export const buildLayoutTree = (
     }
     return a.y - b.y; // otherwise top-to-bottom
   });
-
+  console.log("rootNodes", rootNodes);
   return rootNodes;
 };
 

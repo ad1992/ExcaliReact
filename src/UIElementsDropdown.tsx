@@ -1,14 +1,9 @@
 import { useEffect, useRef, useState } from "react";
+import { UIElement } from "./types";
 
 interface UIElements {
   label: string;
   value: string;
-}
-
-export enum UIElement {
-  BUTTON = "button",
-  INPUT = "input",
-  LINK = "link",
 }
 
 const UIElements = [

@@ -3,6 +3,7 @@ import { getCornerRadius, getFontString } from "../excalidraw/utils";
 import type { CSSProperties } from "react";
 import { VERTICAL_ALIGN } from "../excalidraw/constants";
 import { FONT_FAMILY } from "@excalidraw/excalidraw";
+import type { GroupNode } from "./types";
 
 /**
  * Compute the style of an Excalidraw element.
@@ -91,12 +92,13 @@ export const computeContainerElementStyle = (
 export const computeFrameElementStyle = (
   element: NonDeletedExcalidrawElement
 ): CSSProperties => {
+  const normalizedElement = normalizeElement(element);
   return {
     position: "relative",
-    marginLeft: element.x,
-    marginTop: element.y,
-    width: element.width,
-    height: element.height,
+    marginLeft: normalizedElement.x,
+    marginTop: normalizedElement.y,
+    width: normalizedElement.width,
+    height: normalizedElement.height,
   };
 };
 /**
@@ -136,4 +138,21 @@ const createStyleString = (style: CSSProperties): string => {
     .map(([key, value]) => `${key}: ${stringify(value)}`);
 
   return `${styleEntries.length > 0 ? `{ ${styleEntries.join(", ")} }` : "{}"}`;
+};
+
+/***
+ * Normalize the element by rounding the x, y, width, and height to the nearest integer
+ * @param element - The element to normalize
+ * @returns The normalized element
+ */
+export const normalizeElement = (
+  element: GroupNode | NonDeletedExcalidrawElement
+) => {
+  return {
+    ...element,
+    x: Math.round(element.x),
+    y: Math.round(element.y),
+    width: Math.round(element.width),
+    height: Math.round(element.height),
+  };
 };
