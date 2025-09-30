@@ -1,5 +1,5 @@
 import { Editor } from "@monaco-editor/react";
-import { useExcalidraw } from "./excalidraw/hooks";
+import { useExcalidraw } from "./excalidraw-wrapper/hooks";
 import { useExcalidrawToJSXString } from "./parser/hooks";
 import * as monaco from "monaco-editor";
 export const CodeEditor = () => {

@@ -1,7 +1,7 @@
 import type { NonDeletedExcalidrawElement } from "@excalidraw/excalidraw/element/types";
-import { getCornerRadius, getFontString } from "../excalidraw/utils";
+import { getCornerRadius, getFontString } from "../excalidraw-wrapper/utils";
 import type { CSSProperties } from "react";
-import { VERTICAL_ALIGN } from "../excalidraw/constants";
+import { VERTICAL_ALIGN } from "../excalidraw-wrapper/constants";
 import { FONT_FAMILY } from "@excalidraw/excalidraw";
 import type { GroupNode } from "./types";
 

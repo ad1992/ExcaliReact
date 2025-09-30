@@ -2,7 +2,10 @@ import type {
   ElementsMap,
   NonDeletedExcalidrawElement,
 } from "@excalidraw/excalidraw/element/types";
-import { getBoundTextElement, getContainerElement } from "../excalidraw/utils";
+import {
+  getBoundTextElement,
+  getContainerElement,
+} from "../excalidraw-wrapper/utils";
 import {
   computeBoundTextElementStyle,
   computeContainerElementStyle,

@@ -1,6 +1,6 @@
-import { getElementsMap } from "../excalidraw/utils";
+import { getElementsMap } from "../excalidraw-wrapper/utils";
 import { excalidrawElementToHTML } from "./excalidrawElementToHTML";
-import { useExcalidraw } from "../excalidraw/hooks";
+import { useExcalidraw } from "../excalidraw-wrapper/hooks";
 import reactElementToJSXString from "react-element-to-jsx-string";
 import { buildLayoutTree } from "./buildLayoutTree";
 import { computeFrameElementStyle } from "./utils";

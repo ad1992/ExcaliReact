@@ -3,12 +3,12 @@ import "@excalidraw/excalidraw/index.css";
 import { useState } from "react";
 import { CodeEditor } from "./CodeEditor";
 
-import { ExcalidrawWrapper } from "./excalidraw/ExcalidrawWrapper";
+import { ExcalidrawWrapper } from "./excalidraw-wrapper/ExcalidrawWrapper";
 import { useExcalidrawElementsToJSX } from "./parser/hooks";
 
 function App() {
-  const [previewReactCode, setPreviewReactCode] = useState<boolean>(false);
   const [showCodePanel, setShowCodePanel] = useState<boolean>(false);
+  const [showPreviewPanel, setShowPreviewPanel] = useState<boolean>(false);
 
   const CodePreview = useExcalidrawElementsToJSX();
 
@@ -22,7 +22,7 @@ function App() {
       <div className="flex-1 flex">
         <div
           className={`flex flex-col bg-white border-r border-gray-200 transition-all duration-300 ${
-            showCodePanel ? "w-1/2" : "w-full"
+            showPreviewPanel ? "w-1/2" : "w-full"
           }`}
         >
           <div className="bg-gray-50 border-b border-gray-200 px-6 py-4 flex justify-between items-center">
@@ -31,16 +31,16 @@ function App() {
             </h2>
             <button
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
-              onClick={() => setShowCodePanel(!showCodePanel)}
+              onClick={() => setShowPreviewPanel(!showPreviewPanel)}
             >
-              {showCodePanel ? "Hide Code" : "Show Code"}
+              {showPreviewPanel ? "Hide Preview" : "Show Preview"}
             </button>
           </div>
           <div className="flex-1">
             <ExcalidrawWrapper />
           </div>
         </div>
-        {showCodePanel && (
+        {showPreviewPanel && (
           <>
             <div className="w-1/2 flex flex-col bg-white border-r border-gray-200">
               <div className="bg-gray-50 border-b border-gray-200 px-6 py-4 flex justify-between items-center">
@@ -48,19 +48,19 @@ function App() {
                   Generated React Code
                 </h2>
                 <div className="flex items-center gap-2">
-                  <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
+                  <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm transition-colors">
                     Copy Code
                   </button>
                   <button
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
-                    onClick={() => setPreviewReactCode(!previewReactCode)}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm transition-colors w-36"
+                    onClick={() => setShowCodePanel(!showCodePanel)}
                   >
-                    {previewReactCode ? "Code" : "Preview"}
+                    {showCodePanel ? "Back to Preview" : "Switch to Code"}
                   </button>
                 </div>
               </div>
               <div className="flex-1 overflow-auto p-4 relative">
-                {previewReactCode ? CodePreview : <CodeEditor />}
+                {showCodePanel ? <CodeEditor /> : CodePreview}
               </div>
             </div>
           </>
