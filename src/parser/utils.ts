@@ -95,8 +95,7 @@ export const computeFrameElementStyle = (
   const normalizedElement = normalizeElement(element);
   return {
     position: "relative",
-    marginLeft: normalizedElement.x,
-    marginTop: normalizedElement.y,
+    margin: "0 auto",
     width: normalizedElement.width,
     height: normalizedElement.height,
   };
