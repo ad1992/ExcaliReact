@@ -1,7 +1,4 @@
-import type {
-  ElementsMap,
-  NonDeletedExcalidrawElement,
-} from "@excalidraw/excalidraw/element/types";
+import type { ElementsMap } from "@excalidraw/excalidraw/element/types";
 import {
   getBoundTextElement,
   getContainerElement,
@@ -10,8 +7,10 @@ import {
   computeBoundTextElementStyle,
   computeContainerElementStyle,
   computeExcalidrawElementStyle,
+  computeGroupRowStyle,
+  computeMarginsForElement,
 } from "./utils";
-import type { GroupNode, UIElementType } from "./types";
+import type { GroupNode, TreeNode, UIElementType } from "./types";
 
 /**
  * Convert an Excalidraw element to an HTML element.
@@ -20,28 +19,15 @@ import type { GroupNode, UIElementType } from "./types";
  * @returns The equivalent HTML element.
  */
 export const excalidrawElementToHTML = (
-  element: GroupNode | NonDeletedExcalidrawElement,
-  elementsMap: ElementsMap
+  element: TreeNode,
+  elementsMap: ElementsMap,
+  prevElement: TreeNode | null,
+  isNewRow: boolean
 ): React.ReactNode => {
+  // Don't process group nodes
   if (element.type === "group") {
-    return (
-      <div
-        key={element.id}
-        style={{
-          left: element.x,
-          top: element.y,
-          width: element.width,
-          height: element.height,
-          position: "relative",
-        }}
-      >
-        {element.children.map((child) =>
-          excalidrawElementToHTML(child, elementsMap)
-        )}
-      </div>
-    );
+    return null;
   }
-
   const boundTextElement = getBoundTextElement(element, elementsMap);
   const boundTextBaseStyle = boundTextElement
     ? computeBoundTextElementStyle(boundTextElement)
@@ -49,6 +35,15 @@ export const excalidrawElementToHTML = (
   const baseStyle = boundTextElement
     ? computeContainerElementStyle(element)
     : computeExcalidrawElementStyle(element);
+
+  const margins = computeMarginsForElement(element, prevElement, isNewRow);
+  baseStyle.marginLeft = margins.marginLeft;
+  baseStyle.marginTop = margins.marginTop;
+
+  // For new row display the element as a flex container
+  if (isNewRow) {
+    baseStyle.display = "flex";
+  }
 
   if (element.customData?.type) {
     const customType = element.customData?.type as UIElementType["type"];
@@ -118,4 +113,13 @@ export const excalidrawElementToHTML = (
         return null;
     }
   }
+};
+
+export const createGroupRowJSX = (
+  children: React.ReactNode,
+  groupNode: GroupNode,
+  prevElement: TreeNode | null
+): React.ReactNode => {
+  const groupRowStyle = computeGroupRowStyle(groupNode, prevElement);
+  return <div style={groupRowStyle}>{children}</div>;
 };
