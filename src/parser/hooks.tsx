@@ -2,8 +2,12 @@ import { getElementsMap } from "../excalidraw-wrapper/utils";
 import { excalidrawElementToHTML } from "./excalidrawElementToHTML";
 import { useExcalidraw } from "../excalidraw-wrapper/hooks";
 import reactElementToJSXString from "react-element-to-jsx-string";
-import { buildLayoutTree, splitIntoRows } from "./buildLayoutTree";
-import { computeFrameElementStyle, computeGroupRowStyle } from "./utils";
+import { buildLayoutTree } from "./buildLayoutTree";
+import {
+  computeFrameElementStyle,
+  computeGroupRowStyle,
+  splitIntoRows,
+} from "./utils";
 import type { ElementsMap } from "@excalidraw/excalidraw/element/types";
 import type { RowItem, TreeNode } from "./types";
 
@@ -61,11 +65,11 @@ export const processRows = (
   let currentPrevElement = prevElement;
 
   for (const row of rows) {
-    let rowPrevElement = currentPrevElement;
+    // Row can have prev element only if row has multiple elements and its not the first element of the row
+    let rowPrevElement = row.length === 1 ? currentPrevElement : null;
     const rowJSXElements: React.ReactNode[] = [];
-
     const isSingleRow = row.length === 1 ? true : false;
-
+    
     for (const rowItem of row) {
       // Handle group node
       if (rowItem.type === "group") {
@@ -78,8 +82,8 @@ export const processRows = (
             {groupRowJSXElements}
           </div>
         );
-
-        jsxElements.push(groupRowJSX);
+        // Push the group row JSX to the current row JSX elements
+        rowJSXElements.push(groupRowJSX);
         currentPrevElement = newPrevElement;
         continue;
       } else {

@@ -1,9 +1,12 @@
 import type { NonDeletedExcalidrawElement } from "@excalidraw/excalidraw/element/types";
 import { getCornerRadius, getFontString } from "../excalidraw-wrapper/utils";
 import type { CSSProperties } from "react";
-import { VERTICAL_ALIGN } from "../excalidraw-wrapper/constants";
+import {
+  ROW_THRESHOLD_GAP,
+  VERTICAL_ALIGN,
+} from "../excalidraw-wrapper/constants";
 import { FONT_FAMILY } from "@excalidraw/excalidraw";
-import type { GroupNode, TreeNode, TreeNodeElement } from "./types";
+import type { GroupNode, RowItem, TreeNode, TreeNodeElement } from "./types";
 
 /**
  * Compute the style of an Excalidraw element.
@@ -150,20 +153,20 @@ export const normalizeElement = (
 ) => {
   return {
     ...element,
-    x: Math.round(element.x),
-    y: Math.round(element.y),
-    width: Math.round(element.width),
-    height: Math.round(element.height),
+    x: element.x,
+    y: element.y,
+    width: element.width,
+    height: element.height,
   };
 };
 
 export const normalizeFrameElement = (element: TreeNodeElement) => {
   return {
     ...element,
-    x: Math.round(element.x),
-    y: Math.round(element.y),
-    width: Math.round(element.width),
-    height: Math.round(element.height),
+    x: element.x,
+    y: element.y,
+    width: element.width,
+    height: element.height,
   };
 };
 
@@ -285,4 +288,70 @@ export const computeFramePadding = (
     right: frame.x + frame.width - boundingBox.maxX,
     bottom: frame.y + frame.height - boundingBox.maxY,
   };
+};
+
+export const areInSameRow = (node1: TreeNode, node2: TreeNode) => {
+  const node1Top = node1.y;
+  const node1Bottom = node1.y + node1.height;
+  const node2Top = node2.y;
+  const node2Bottom = node2.y + node2.height;
+
+  const overlap =
+    Math.min(node1Bottom, node2Bottom) - Math.max(node1Top, node2Top);
+
+  return overlap > ROW_THRESHOLD_GAP;
+};
+
+export const splitIntoRows = (nodes: TreeNode["children"]): Array<RowItem> => {
+  if (!nodes || nodes.length === 0) {
+    return [];
+  }
+  const result: Array<RowItem> = [];
+  const firstChild = nodes[0];
+  // If the first child is a group, return the rows
+  if (firstChild.type === "group") {
+    const groupNodeRows = splitIntoRows(firstChild.children);
+
+    result.push([
+      {
+        ...firstChild,
+        rows: groupNodeRows,
+      },
+    ]);
+    return result;
+  }
+
+  let currentRow: TreeNode["children"] = [firstChild];
+  let previousElement: TreeNode = firstChild;
+
+  for (let i = 1; i < nodes.length; i++) {
+    const child = nodes[i];
+    // Don't process group nodes
+    if (child.type === "group") {
+      const groupNode = child;
+      const groupNodeRowElement = splitIntoRows(groupNode.children);
+      const groupNodeRow = {
+        ...groupNode,
+        rows: groupNodeRowElement,
+      };
+
+      if (areInSameRow(groupNodeRow, previousElement)) {
+        currentRow.push(groupNodeRow);
+      } else {
+        result.push(currentRow);
+        currentRow = [groupNodeRow];
+      }
+      previousElement = groupNodeRow;
+      continue;
+    }
+    if (areInSameRow(child, previousElement)) {
+      currentRow.push(child);
+    } else {
+      result.push(currentRow);
+      currentRow = [child];
+    }
+    previousElement = child;
+  }
+  result.push(currentRow);
+  return result;
 };

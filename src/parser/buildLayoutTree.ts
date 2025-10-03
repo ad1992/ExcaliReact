@@ -3,18 +3,18 @@ import type {
   NonDeletedExcalidrawElement,
 } from "@excalidraw/excalidraw/element/types";
 import {
+  areInSameRow,
   computeFramePadding,
   computeGroupNodeBoundingBox,
   normalizeElement,
 } from "./utils";
-import type { GroupNode, RowItem, TreeNode } from "./types";
+import type { GroupNode, TreeNode } from "./types";
 import {
   getBoundTextElement,
   getContainerElement,
   getElementsMap,
 } from "../excalidraw-wrapper/utils";
 
-const ROW_THRESHOLD_GAP = 10;
 /**
  * Build the layout tree for the elements. The layout tree is a tree of nodes grouped by their groupIds in order of their nesting depth. The nodes are sorted based on their position in the DOM.
  * @param elements - The elements to build the layout tree for.
@@ -127,6 +127,7 @@ export const buildLayoutTree = (
   // Sort the nodes based on the position so its placed in correct order
   // in the DOM
   sortNodesByPosition(frameNode);
+
   return rootNodes;
 };
 
@@ -141,7 +142,7 @@ export const sortNodesByPosition = (node: TreeNode) => {
     return;
   }
   node.children.sort((a, b) => {
-    if (Math.abs(a.y - b.y) < ROW_THRESHOLD_GAP) {
+    if (areInSameRow(a, b)) {
       return a.x - b.x; // same row → left-to-right
     }
     return a.y - b.y; // otherwise top-to-bottom
@@ -153,58 +154,7 @@ export const sortNodesByPosition = (node: TreeNode) => {
       sortNodesByPosition(child);
     }
   });
-};
-
-export const splitIntoRows = (nodes: TreeNode["children"]): Array<RowItem> => {
-  if (!nodes || nodes.length === 0) {
-    return [];
-  }
-  const result: Array<RowItem> = [];
-  const firstChild = nodes[0];
-
-  // If the first child is a group, return the rows
-  if (firstChild.type === "group") {
-    const groupNodeRows = splitIntoRows(firstChild.children);
-
-    result.push([
-      {
-        ...firstChild,
-        rows: groupNodeRows,
-      },
-    ]);
-    return result;
-  }
-
-  let currentRow: TreeNode["children"] = [firstChild];
-
-  for (let i = 1; i < nodes.length; i++) {
-    const child = nodes[i];
-
-    // Don't process group nodes
-    if (child.type === "group") {
-      const groupNode = child;
-      const groupNodeRowElement = splitIntoRows(groupNode.children);
-      const groupNodeRow = {
-        ...groupNode,
-        rows: groupNodeRowElement,
-      };
-      if (Math.abs(groupNode.y - currentRow[0].y) < ROW_THRESHOLD_GAP) {
-        currentRow.push(groupNodeRow);
-      } else {
-        result.push(currentRow);
-        currentRow = [groupNodeRow];
-      }
-      continue;
-    }
-    if (Math.abs(child.y - currentRow[0].y) < ROW_THRESHOLD_GAP) {
-      currentRow.push(child);
-    } else {
-      result.push(currentRow);
-      currentRow = [child];
-    }
-  }
-  result.push(currentRow);
-  return result;
+  console.log("node", node);
 };
 
 /**
@@ -256,6 +206,7 @@ export const normalizeLayoutNodes = (parentNode: TreeNode) => {
       x: node.x - parentNode.x - parentNodePadding.left,
       y: node.y - parentNode.y - parentNodePadding.top,
     };
+
     parentNode.children[index] = updatedNode;
 
     if (node.children?.length) {
