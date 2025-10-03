@@ -170,36 +170,6 @@ export const normalizeFrameElement = (element: TreeNodeElement) => {
   };
 };
 
-export const computeMarginsForElement = <
-  T extends { x: number; y: number; width: number; height: number },
->(
-  element: T & Required<Pick<T, "x" | "y" | "width" | "height">>,
-  prevElement: (T & Required<Pick<T, "x" | "y" | "width" | "height">>) | null,
-  isSingleRow: boolean
-) => {
-  if (!prevElement) {
-    return {
-      left: 0,
-      top: 0,
-      right: 0,
-      bottom: 0,
-    };
-  }
-  if (isSingleRow) {
-    const marginTop = element.y - (prevElement.y + prevElement.height);
-    return {
-      marginTop,
-      // element.x is the x coordinate of the element with respect to its parent node hence its the margin left
-      marginLeft: element.x,
-    };
-  }
-  // Margin left is the difference between the x coordinate of the element and the x coordinate of its sibling element in the same row
-  const marginLeft = element.x - (prevElement.x + prevElement.width);
-  return {
-    marginLeft,
-  };
-};
-
 export const computeGroupRowStyle = (
   groupNode: GroupNode,
   prevElement: TreeNode | null
@@ -208,14 +178,12 @@ export const computeGroupRowStyle = (
   const flexDirection = groupNode.rows.length === 1 ? "row" : "column";
   console.log(prevElement, "prevElement");
   console.log(groupNode, "groupNode");
-  const margins = computeMarginsForElement(groupNode, prevElement, true);
   const groupRowStyle: CSSProperties = {
     display: "flex",
     flexDirection,
     width: groupNode.width,
     height: groupNode.height,
-    marginLeft: margins.marginLeft,
-    marginTop: margins.marginTop,
+    marginLeft: groupNode.x,
   };
   return groupRowStyle;
 };
@@ -268,6 +236,24 @@ export const computeFrameNodeBoundingBox = (
     maxY = Math.max(maxY, element.y + element.height);
   }
 
+  return { minX, minY, maxX, maxY };
+};
+
+export const computeRowBoundingBox = (row: RowItem | null) => {
+  if (!row) {
+    return { minX: 0, minY: 0, maxX: 0, maxY: 0 };
+  }
+  let minX = Infinity;
+  let minY = Infinity;
+  let maxX = -Infinity;
+  let maxY = -Infinity;
+
+  for (const element of row) {
+    minX = Math.min(minX, element.x);
+    minY = Math.min(minY, element.y);
+    maxX = Math.max(maxX, element.x + element.width);
+    maxY = Math.max(maxY, element.y + element.height);
+  }
   return { minX, minY, maxX, maxY };
 };
 

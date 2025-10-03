@@ -6,6 +6,7 @@ import { buildLayoutTree } from "./buildLayoutTree";
 import {
   computeFrameElementStyle,
   computeGroupRowStyle,
+  computeRowBoundingBox,
   splitIntoRows,
 } from "./utils";
 import type { ElementsMap } from "@excalidraw/excalidraw/element/types";
@@ -47,9 +48,11 @@ export const ExcalidrawToReact = () => {
 `;
 };
 
-export const createRowJSX = (children: React.ReactNode) => {
+export const createRowJSX = (children: React.ReactNode, marginTop: number) => {
   return (
-    <div style={{ display: "flex", alignItems: "center" }}>{children}</div>
+    <div style={{ display: "flex", alignItems: "center", marginTop }}>
+      {children}
+    </div>
   );
 };
 
@@ -64,12 +67,12 @@ export const processRows = (
   const jsxElements: React.ReactNode[] = [];
   let currentPrevElement = prevElement;
 
-  for (const row of rows) {
+  for (const [index, row] of rows.entries()) {
     // Row can have prev element only if row has multiple elements and its not the first element of the row
     let rowPrevElement = row.length === 1 ? currentPrevElement : null;
     const rowJSXElements: React.ReactNode[] = [];
     const isSingleRow = row.length === 1 ? true : false;
-    
+
     for (const rowItem of row) {
       // Handle group node
       if (rowItem.type === "group") {
@@ -104,8 +107,12 @@ export const processRows = (
     }
 
     if (rowJSXElements.length > 0) {
+      const prevRow = index === 0 ? null : rows[index - 1];
+      const boundingBoxPrevRow = computeRowBoundingBox(prevRow);
+      const boundingBoxCurrentRow = computeRowBoundingBox(row);
+      const marginTop = boundingBoxCurrentRow.minY - boundingBoxPrevRow.maxY;
       // Create the parent row and append the child rows to it
-      const parentRow = createRowJSX(rowJSXElements);
+      const parentRow = createRowJSX(rowJSXElements, marginTop);
       jsxElements.push(parentRow);
     }
   }

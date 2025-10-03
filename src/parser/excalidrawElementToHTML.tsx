@@ -8,7 +8,6 @@ import {
   computeContainerElementStyle,
   computeExcalidrawElementStyle,
   computeGroupRowStyle,
-  computeMarginsForElement,
 } from "./utils";
 import type { GroupNode, TreeNode, UIElementType } from "./types";
 
@@ -36,9 +35,13 @@ export const excalidrawElementToHTML = (
     ? computeContainerElementStyle(element)
     : computeExcalidrawElementStyle(element);
 
-  const margins = computeMarginsForElement(element, prevElement, isSingleRow);
-  baseStyle.marginLeft = margins.marginLeft;
-  baseStyle.marginTop = margins.marginTop;
+  // Compute the margin left for the element with respect to its sibling element in the same row
+  if (prevElement) {
+    const marginLeft = isSingleRow
+      ? element.x
+      : element.x - (prevElement.x + prevElement.width);
+    baseStyle.marginLeft = marginLeft;
+  }
 
   // For new row display the element as a flex container
   if (isSingleRow) {
