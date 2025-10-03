@@ -172,7 +172,7 @@ export const computeMarginsForElement = <
 >(
   element: T & Required<Pick<T, "x" | "y" | "width" | "height">>,
   prevElement: (T & Required<Pick<T, "x" | "y" | "width" | "height">>) | null,
-  isNewRow: boolean
+  isSingleRow: boolean
 ) => {
   if (!prevElement) {
     return {
@@ -182,12 +182,15 @@ export const computeMarginsForElement = <
       bottom: 0,
     };
   }
-  if (isNewRow) {
+  if (isSingleRow) {
     const marginTop = element.y - (prevElement.y + prevElement.height);
     return {
       marginTop,
+      // element.x is the x coordinate of the element with respect to its parent node hence its the margin left
+      marginLeft: element.x,
     };
   }
+  // Margin left is the difference between the x coordinate of the element and the x coordinate of its sibling element in the same row
   const marginLeft = element.x - (prevElement.x + prevElement.width);
   return {
     marginLeft,

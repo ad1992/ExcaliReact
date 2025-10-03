@@ -22,7 +22,7 @@ export const excalidrawElementToHTML = (
   element: TreeNode,
   elementsMap: ElementsMap,
   prevElement: TreeNode | null,
-  isNewRow: boolean
+  isSingleRow: boolean
 ): React.ReactNode => {
   // Don't process group nodes
   if (element.type === "group") {
@@ -36,12 +36,12 @@ export const excalidrawElementToHTML = (
     ? computeContainerElementStyle(element)
     : computeExcalidrawElementStyle(element);
 
-  const margins = computeMarginsForElement(element, prevElement, isNewRow);
+  const margins = computeMarginsForElement(element, prevElement, isSingleRow);
   baseStyle.marginLeft = margins.marginLeft;
   baseStyle.marginTop = margins.marginTop;
 
   // For new row display the element as a flex container
-  if (isNewRow) {
+  if (isSingleRow) {
     baseStyle.display = "flex";
   }
 

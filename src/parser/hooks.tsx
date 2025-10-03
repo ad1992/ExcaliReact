@@ -64,7 +64,7 @@ export const processRows = (
     let rowPrevElement = currentPrevElement;
     const rowJSXElements: React.ReactNode[] = [];
 
-    const isNewRow = row.length === 1 ? true : false;
+    const isSingleRow = row.length === 1 ? true : false;
 
     for (const rowItem of row) {
       // Handle group node
@@ -87,7 +87,7 @@ export const processRows = (
           rowItem,
           elementsMap,
           rowPrevElement,
-          isNewRow
+          isSingleRow
         );
         if (!jsxElement) {
           continue;
