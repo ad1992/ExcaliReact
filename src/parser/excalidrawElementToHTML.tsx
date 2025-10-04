@@ -8,6 +8,7 @@ import {
   computeContainerElementStyle,
   computeExcalidrawElementStyle,
   computeGroupRowStyle,
+  computeMarginLeftForElement,
 } from "./utils";
 import type { GroupNode, TreeNode, UIElementType } from "./types";
 
@@ -21,7 +22,7 @@ export const excalidrawElementToHTML = (
   element: TreeNode,
   elementsMap: ElementsMap,
   prevElement: TreeNode | null,
-  isSingleRow: boolean
+  isSingleElementRow: boolean
 ): React.ReactNode => {
   // Don't process group nodes
   if (element.type === "group") {
@@ -36,15 +37,12 @@ export const excalidrawElementToHTML = (
     : computeExcalidrawElementStyle(element);
 
   // Compute the margin left for the element with respect to its sibling element in the same row
-  if (prevElement) {
-    const marginLeft = isSingleRow
-      ? element.x
-      : element.x - (prevElement.x + prevElement.width);
-    baseStyle.marginLeft = marginLeft;
-  }
+
+  const marginLeft = computeMarginLeftForElement(element, prevElement);
+  baseStyle.marginLeft = marginLeft;
 
   // For new row display the element as a flex container
-  if (isSingleRow) {
+  if (isSingleElementRow) {
     baseStyle.display = "flex";
   }
 

@@ -341,3 +341,20 @@ export const splitIntoRows = (nodes: TreeNode["children"]): Array<RowItem> => {
   result.push(currentRow);
   return result;
 };
+
+/**
+ * Compute the margin left for an element with respect to its sibling element in the same row.
+ * @param element - The element to compute the margin left for.
+ * @param siblingElement - The sibling element to compute the margin left for.
+ * @returns The margin left for the element.
+ */
+export const computeMarginLeftForElement = (
+  element: TreeNode,
+  siblingElement: TreeNode | null
+) => {
+  if (siblingElement) {
+    return element.x - (siblingElement.x + siblingElement.width);
+  }
+  // For first element in the row, there is no sibling element since its the first element in the row hence return the x coordinate of the element as its coordinates are with respect to the parent element
+  return element.x;
+};

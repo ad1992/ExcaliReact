@@ -6,6 +6,7 @@ import { buildLayoutTree } from "./buildLayoutTree";
 import {
   computeFrameElementStyle,
   computeGroupRowStyle,
+  computeMarginLeftForElement,
   computeRowBoundingBox,
   splitIntoRows,
 } from "./utils";
@@ -62,23 +63,30 @@ export const processRows = (
   prevElement: TreeNode | null
 ): {
   jsxElements: React.ReactNode[];
-  newPrevElement: TreeNode | null;
+  newLastProcessedElement: TreeNode | null;
 } => {
   const jsxElements: React.ReactNode[] = [];
-  let currentPrevElement = prevElement;
+  let lastProcessedElement = prevElement;
 
   for (const [index, row] of rows.entries()) {
     // Row can have prev element only if row has multiple elements and its not the first element of the row
-    let rowPrevElement = row.length === 1 ? currentPrevElement : null;
     const rowJSXElements: React.ReactNode[] = [];
-    const isSingleRow = row.length === 1 ? true : false;
+    const isSingleElementRow = row.length === 1;
+    lastProcessedElement = null;
+    for (const [rowIndex, rowItem] of row.entries()) {
+      const siblingElement = rowIndex === 0 ? null : row[rowIndex - 1];
 
-    for (const rowItem of row) {
       // Handle group node
       if (rowItem.type === "group") {
-        const groupRowStyle = computeGroupRowStyle(rowItem, currentPrevElement);
-        const { jsxElements: groupRowJSXElements, newPrevElement } =
+        const groupRowStyle = computeGroupRowStyle(
+          rowItem,
+          lastProcessedElement
+        );
+        const { jsxElements: groupRowJSXElements, newLastProcessedElement } =
           processRows(rowItem.rows, elementsMap, null);
+        // Compute the margin left for the group row with respect to its sibling element in the same row
+        const marginLeft = computeMarginLeftForElement(rowItem, siblingElement);
+        groupRowStyle.marginLeft = marginLeft;
 
         const groupRowJSX = (
           <div key={rowItem.id} style={groupRowStyle} id={rowItem.id}>
@@ -87,22 +95,22 @@ export const processRows = (
         );
         // Push the group row JSX to the current row JSX elements
         rowJSXElements.push(groupRowJSX);
-        currentPrevElement = newPrevElement;
+        lastProcessedElement = newLastProcessedElement;
         continue;
       } else {
+        // For first element in the row, there is no sibling element since its the first element in the row
         const jsxElement = excalidrawElementToHTML(
           rowItem,
           elementsMap,
-          rowPrevElement,
-          isSingleRow
+          siblingElement,
+          isSingleElementRow
         );
         if (!jsxElement) {
           continue;
         }
         rowJSXElements.push(jsxElement);
-        rowPrevElement = rowItem;
 
-        currentPrevElement = row[0];
+        lastProcessedElement = rowItem;
       }
     }
 
@@ -116,5 +124,5 @@ export const processRows = (
       jsxElements.push(parentRow);
     }
   }
-  return { jsxElements, newPrevElement: currentPrevElement };
+  return { jsxElements, newLastProcessedElement: lastProcessedElement };
 };
