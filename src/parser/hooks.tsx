@@ -12,6 +12,7 @@ import {
 } from "./utils";
 import type { ElementsMap } from "@excalidraw/excalidraw/element/types";
 import type { RowItem } from "./types";
+import { nanoid } from "nanoid";
 
 export const useExcalidrawElementsToJSX = () => {
   const { elements } = useExcalidraw();
@@ -54,16 +55,20 @@ export const useExcalidrawToJSXString = () => {
     showFunctions: true,
     functionValue: (fn) => fn.toString(),
   });
-  return `import React from 'react';
-export const ExcalidrawToReact = () => {
+  return `export const ExcalidrawToReact = () => {
   return ${jsxComp}
 };
 `;
 };
 
 export const createRowJSX = (children: React.ReactNode, marginTop: number) => {
+  const rowId = nanoid();
+
   return (
-    <div style={{ display: "flex", alignItems: "center", marginTop }}>
+    <div
+      style={{ display: "flex", alignItems: "center", marginTop }}
+      key={rowId}
+    >
       {children}
     </div>
   );
@@ -85,7 +90,7 @@ export const processRows = (
 
       // Handle group node
       if (rowItem.type === "group") {
-        const groupRowStyle = computeGroupRowStyle(rowItem, siblingElement);
+        const groupRowStyle = computeGroupRowStyle(rowItem);
         const groupRowJSXElements = processRows(rowItem.rows, elementsMap);
         // Compute the margin left for the group row with respect to its sibling element in the same row
         const marginLeft = computeMarginLeftForElement(rowItem, siblingElement);

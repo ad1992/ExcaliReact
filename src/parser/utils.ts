@@ -167,14 +167,9 @@ export const normalizeFrameElement = (element: TreeNodeElement) => {
   };
 };
 
-export const computeGroupRowStyle = (
-  groupNode: GroupNode,
-  prevElement: TreeNode | null
-): CSSProperties => {
+export const computeGroupRowStyle = (groupNode: GroupNode): CSSProperties => {
   // compute flex direction
   const flexDirection = groupNode.rows.length === 1 ? "row" : "column";
-  console.log(prevElement, "prevElement");
-  console.log(groupNode, "groupNode");
   const groupRowStyle: CSSProperties = {
     display: "flex",
     flexDirection,

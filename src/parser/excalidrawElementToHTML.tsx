@@ -118,9 +118,8 @@ export const excalidrawElementToHTML = (
 
 export const createGroupRowJSX = (
   children: React.ReactNode,
-  groupNode: GroupNode,
-  prevElement: TreeNode | null
+  groupNode: GroupNode
 ): React.ReactNode => {
-  const groupRowStyle = computeGroupRowStyle(groupNode, prevElement);
+  const groupRowStyle = computeGroupRowStyle(groupNode);
   return <div style={groupRowStyle}>{children}</div>;
 };

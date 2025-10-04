@@ -154,7 +154,6 @@ export const sortNodesByPosition = (node: TreeNode) => {
       sortNodesByPosition(child);
     }
   });
-  console.log("node", node);
 };
 
 /**

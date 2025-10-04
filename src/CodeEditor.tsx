@@ -46,8 +46,11 @@ export const CodeEditor = () => {
         tabSize: 2,
         wordWrap: "on",
         wordWrapColumn: 80,
-        formatOnPaste: true,
-        formatOnType: true,
+        readOnly: true,
+        readOnlyMessage: {
+          value:
+            "The code is generated from your Excalidraw diagram and is read-only",
+        },
       }}
       loading={<div>Loading...</div>}
     />
