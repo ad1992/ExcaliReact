@@ -59,7 +59,7 @@ function App() {
                   </button>
                 </div>
               </div>
-              <div className="flex-1 overflow-auto p-4 relative">
+              <div className="flex-1 overflow-auto p-4 relative ">
                 {showCodePanel ? <CodeEditor /> : CodePreview}
               </div>
             </div>
