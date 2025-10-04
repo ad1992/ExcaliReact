@@ -8,6 +8,11 @@ interface UIElements {
 
 const UIElements = [
   {
+    label: "Frame",
+    value: UIElement.FRAME,
+  },
+
+  {
     label: "Button",
     value: UIElement.BUTTON,
   },
@@ -18,6 +23,10 @@ const UIElements = [
   {
     label: "Link",
     value: UIElement.LINK,
+  },
+  {
+    label: "Text",
+    value: UIElement.TEXT,
   },
 ];
 

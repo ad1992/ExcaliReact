@@ -7,3 +7,13 @@ button {
 .excaliFont {
   font-family: "Excalifont", "Xiaolai", sans-serif, "Segoe UI Emoji";
 }
+
+.excalidraw .App-toolbar .ToolIcon_type_freedraw,
+.excalidraw .App-toolbar .ToolIcon_type_arrow,
+.excalidraw .App-toolbar .ToolIcon_type_text {
+  display: none !important;
+}
+
+.excalidraw .App-toolbar {
+  display: none;
+}

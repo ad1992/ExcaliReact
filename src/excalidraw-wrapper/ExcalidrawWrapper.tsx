@@ -94,6 +94,7 @@ export const ExcalidrawWrapper = () => {
               fontSize: DEFAULT_CONFIG.LINK.TEXT_FONT_SIZE,
             };
             break;
+
           default:
             break;
         }
@@ -120,6 +121,18 @@ export const ExcalidrawWrapper = () => {
   const handleUIElementSelect = useCallback(
     (uiElement: UIElement) => {
       if (!excalidrawAPI) return;
+      if (uiElement === UIElement.TEXT) {
+        excalidrawAPI.setActiveTool({
+          type: "text",
+        });
+        return;
+      }
+      if (uiElement === UIElement.FRAME) {
+        excalidrawAPI.setActiveTool({
+          type: "frame",
+        });
+        return;
+      }
       excalidrawAPI.setActiveTool({
         type: "custom",
         customType: uiElement,
