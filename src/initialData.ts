@@ -589,4 +589,5 @@ export const initialData = {
     },
   ],
   files: {},
+  scrollToContent: true,
 } as unknown as ExcalidrawInitialDataState;
