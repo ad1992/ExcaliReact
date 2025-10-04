@@ -1,3 +1,5 @@
+import type { ExcalidrawInitialDataState } from "@excalidraw/excalidraw/types";
+
 export const initialData = {
   elements: [
     {
@@ -587,4 +589,4 @@ export const initialData = {
     },
   ],
   files: {},
-};
+} as unknown as ExcalidrawInitialDataState;
