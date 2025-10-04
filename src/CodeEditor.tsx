@@ -13,7 +13,6 @@ export const CodeEditor = () => {
       tabSize: 2,
       insertSpaces: true,
     });
-    editor.getAction("editor.action.formatDocument")?.run();
 
     monacoInstance.languages.typescript.typescriptDefaults.setCompilerOptions({
       jsx: monacoInstance.languages.typescript.JsxEmit.React,
@@ -50,6 +49,7 @@ export const CodeEditor = () => {
         formatOnPaste: true,
         formatOnType: true,
       }}
+      loading={<div>Loading...</div>}
     />
   );
 };

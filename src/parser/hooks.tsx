@@ -50,7 +50,7 @@ export const useExcalidrawElementsToJSX = () => {
 
 export const useExcalidrawToJSXString = () => {
   const jsx = useExcalidrawElementsToJSX();
-  const jsxComp = reactElementToJSXString(<>{jsx}</>, {
+  const jsxComp = reactElementToJSXString(jsx, {
     showFunctions: true,
     functionValue: (fn) => fn.toString(),
   });
