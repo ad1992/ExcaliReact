@@ -3,8 +3,20 @@ import { useExcalidraw } from "./excalidraw-wrapper/hooks";
 import { useExcalidrawToJSXString } from "./parser/hooks";
 import * as monaco from "monaco-editor";
 import { CopyIcon } from "./assets/Icons";
+import { useEffect, useState } from "react";
+
+const AUTO_HIDE_TOAST_TIME = 3000;
+
 export const CodeEditor = () => {
   const { excalidrawAPI } = useExcalidraw();
+
+  const [toast, setToast] = useState<{
+    type: "success" | "error" | null;
+    message: string;
+  }>({
+    type: null,
+    message: "",
+  });
 
   const handleEditorDidMount = (
     editor: monaco.editor.IStandaloneCodeEditor,
@@ -29,6 +41,32 @@ export const CodeEditor = () => {
     );
   };
   const jsxCode = useExcalidrawToJSXString();
+
+  const handleCopyCode = async () => {
+    try {
+      await navigator.clipboard.writeText(jsxCode);
+      setToast({
+        type: "success",
+        message: "Code copied to clipboard successfully",
+      });
+    } catch (err) {
+      console.error("Failed to copy code to clipboard", err);
+      setToast({
+        type: "error",
+        message: "Failed to copy code to clipboard",
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (!toast) {
+      return;
+    }
+
+    setTimeout(() => {
+      setToast({ type: null, message: "" });
+    }, AUTO_HIDE_TOAST_TIME);
+  }, [toast]);
 
   if (!excalidrawAPI) return null;
 
@@ -59,9 +97,17 @@ export const CodeEditor = () => {
       <button
         className="absolute top-0 right-4 bg-gray-700 hover:bg-gray-600 text-white p-2 shadow-2xl border border-gray-700 z-10"
         title="Copy Code to Clipboard"
+        onClick={handleCopyCode}
       >
         <CopyIcon />
       </button>
+      {toast.type && (
+        <div
+          className={`absolute top-10 right-4 text-white p-2 shadow-2xl border border-gray-700 z-10 ${toast.type === "success" ? "bg-green-700" : "bg-red-500"}`}
+        >
+          <div className="flex items-center gap-2">{toast.message}</div>
+        </div>
+      )}
     </div>
   );
 };
