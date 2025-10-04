@@ -14,6 +14,8 @@ import {
 import { ReactIcon } from "./assets/ReactLogo";
 import { useExcalidraw } from "./excalidraw-wrapper/hooks";
 
+const SCROLL_TO_CONTENT_ANIMATION_DURATION = 500;
+
 function App() {
   const [showCodePanel, setShowCodePanel] = useState<boolean>(false);
   const [showPreviewPanel, setShowPreviewPanel] = useState<boolean>(false);
@@ -34,7 +36,10 @@ function App() {
     if (prevShowPreviewPanelRef.current !== showPreviewPanel) {
       // Push the scrollToContent to the next tick to avoid the layout shift due to transition when showPreviewPanel is updated
       setTimeout(() => {
-        excalidrawAPI.scrollToContent();
+        excalidrawAPI.scrollToContent(undefined, {
+          animate: true,
+          duration: SCROLL_TO_CONTENT_ANIMATION_DURATION,
+        });
       }, 0);
     }
   }, [excalidrawAPI, showPreviewPanel]);
