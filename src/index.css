@@ -3,3 +3,7 @@
 button {
   cursor: pointer;
 }
+
+.excaliFont {
+  font-family: "Excalifont", "Xiaolai", sans-serif, "Segoe UI Emoji";
+}

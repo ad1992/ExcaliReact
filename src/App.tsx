@@ -5,6 +5,13 @@ import { CodeEditor } from "./CodeEditor";
 
 import { ExcalidrawWrapper } from "./excalidraw-wrapper/ExcalidrawWrapper";
 import { useExcalidrawElementsToJSX } from "./parser/hooks";
+import {
+  CodeIcon,
+  FullScreenIcon,
+  PreviewIcon,
+  RightArrowIcon,
+} from "./assets/Icons";
+import { ReactIcon } from "./assets/ReactLogo";
 
 function App() {
   const [showCodePanel, setShowCodePanel] = useState<boolean>(false);
@@ -14,9 +21,14 @@ function App() {
 
   return (
     <div className="h-screen flex flex-col bg-gray-50">
-      <header className="bg-white border-b border-gray-200 px-8 py-4 shadow-sm">
-        <h1 className="text-3xl font-bold text-gray-800 text-center">
-          Excalidraw to React
+      <header className="bg-white border-b border-gray-200 px-8 py-3 shadow-sm">
+        <h1 className="text-2xl font-bold text-center excaliFont">
+          <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            ExcaliReact
+          </span>
+          <span className="text-base font-normal text-gray-500 ml-3 border-l border-gray-300 pl-3">
+            Sketch to React
+          </span>
         </h1>
       </header>
       <div className="flex-1 flex">
@@ -26,14 +38,23 @@ function App() {
           }`}
         >
           <div className="bg-gray-50 border-b border-gray-200 px-6 py-4 flex justify-between items-center">
-            <h2 className="text-xl font-semibold text-gray-700">
-              Draw Your Diagram
+            <h2 className="text-l font-semibold text-gray-700">
+              Sketch Your Diagram
             </h2>
             <button
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
+              className="bg-white hover:bg-gray-100 text-black px-3 py-1 rounded-md text-base flex items-center gap-1 border border-gray-300 shadow-sm excaliFont"
               onClick={() => setShowPreviewPanel(!showPreviewPanel)}
             >
-              {showPreviewPanel ? "Hide Preview" : "Show Preview"}
+              {showPreviewPanel ? (
+                <>
+                  <FullScreenIcon />
+                  Sketch
+                </>
+              ) : (
+                <>
+                  Excalidraw <RightArrowIcon /> React <ReactIcon />
+                </>
+              )}
             </button>
           </div>
           <div className="flex-1">
@@ -44,18 +65,27 @@ function App() {
           <>
             <div className="w-1/2 flex flex-col bg-white border-r border-gray-200">
               <div className="bg-gray-50 border-b border-gray-200 px-6 py-4 flex justify-between items-center">
-                <h2 className="text-xl font-semibold text-gray-700">
-                  Generated React Code
+                <h2 className="text-l font-semibold text-gray-700">
+                  ExcaliReact Component
                 </h2>
                 <div className="flex items-center gap-2">
-                  <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm transition-colors">
-                    Copy Code
-                  </button>
                   <button
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm transition-colors w-36"
+                    className="bg-white hover:bg-gray-100 text-black px-3 py-1 rounded-md text-xs flex items-center gap-1 border border-gray-300 shadow-sm"
                     onClick={() => setShowCodePanel(!showCodePanel)}
                   >
-                    {showCodePanel ? "Back to Preview" : "Switch to Code"}
+                    <div className="flex items-center gap-2">
+                      {showCodePanel ? (
+                        <>
+                          <PreviewIcon />
+                          Preview
+                        </>
+                      ) : (
+                        <>
+                          <CodeIcon />
+                          Code
+                        </>
+                      )}
+                    </div>
                   </button>
                 </div>
               </div>

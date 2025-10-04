@@ -2,6 +2,7 @@ import { Editor } from "@monaco-editor/react";
 import { useExcalidraw } from "./excalidraw-wrapper/hooks";
 import { useExcalidrawToJSXString } from "./parser/hooks";
 import * as monaco from "monaco-editor";
+import { CopyIcon } from "./assets/Icons";
 export const CodeEditor = () => {
   const { excalidrawAPI } = useExcalidraw();
 
@@ -32,27 +33,35 @@ export const CodeEditor = () => {
   if (!excalidrawAPI) return null;
 
   return (
-    <Editor
-      language="typescript"
-      value={jsxCode}
-      height="100%"
-      theme="vs-dark"
-      onMount={handleEditorDidMount}
-      options={{
-        minimap: {
-          enabled: false,
-        },
-        automaticLayout: true,
-        tabSize: 2,
-        wordWrap: "on",
-        wordWrapColumn: 80,
-        readOnly: true,
-        readOnlyMessage: {
-          value:
-            "The code is generated from your Excalidraw diagram and is read-only",
-        },
-      }}
-      loading={<div>Loading...</div>}
-    />
+    <div className="relative h-full">
+      <Editor
+        language="typescript"
+        value={jsxCode}
+        height="100%"
+        theme="vs-dark"
+        onMount={handleEditorDidMount}
+        options={{
+          minimap: {
+            enabled: false,
+          },
+          automaticLayout: true,
+          tabSize: 2,
+          wordWrap: "on",
+          wordWrapColumn: 80,
+          readOnly: true,
+          readOnlyMessage: {
+            value:
+              "The code is generated from your Excalidraw diagram and is read-only",
+          },
+        }}
+        loading={<div>Loading...</div>}
+      />
+      <button
+        className="absolute top-0 right-4 bg-gray-700 hover:bg-gray-600 text-white p-2 shadow-2xl border border-gray-700 z-10"
+        title="Copy Code to Clipboard"
+      >
+        <CopyIcon />
+      </button>
+    </div>
   );
 };
