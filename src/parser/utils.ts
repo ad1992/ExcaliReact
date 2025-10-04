@@ -1,12 +1,10 @@
 import type { NonDeletedExcalidrawElement } from "@excalidraw/excalidraw/element/types";
 import { getCornerRadius, getFontString } from "../excalidraw-wrapper/utils";
 import type { CSSProperties } from "react";
-import {
-  ROW_THRESHOLD_GAP,
-  VERTICAL_ALIGN,
-} from "../excalidraw-wrapper/constants";
+import { VERTICAL_ALIGN } from "../excalidraw-wrapper/constants";
 import { FONT_FAMILY } from "@excalidraw/excalidraw";
 import type { GroupNode, RowItem, TreeNode, TreeNodeElement } from "./types";
+import { ROW_THRESHOLD_GAP } from "../constants";
 
 /**
  * Compute the style of an Excalidraw element.

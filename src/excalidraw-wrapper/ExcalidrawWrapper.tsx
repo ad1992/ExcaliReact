@@ -1,7 +1,6 @@
 import {
   convertToExcalidrawElements,
   Excalidraw,
-  FONT_FAMILY,
   Footer,
 } from "@excalidraw/excalidraw";
 import { UIElementsDropdown } from "../UIElementsDropdown";
@@ -15,6 +14,7 @@ import { useExcalidraw } from "./hooks";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { NonDeletedExcalidrawElement } from "@excalidraw/excalidraw/element/types";
 import { UIElement } from "../types";
+import { DEFAULT_CONFIG } from "../constants";
 
 export const ExcalidrawWrapper = () => {
   const { excalidrawAPI, setExcalidrawAPI, elements, setElements } =
@@ -55,13 +55,27 @@ export const ExcalidrawWrapper = () => {
       if (activeTool.type === "custom") {
         switch (activeTool.customType) {
           case UIElement.BUTTON:
+            customElement = {
+              type: "rectangle",
+              x: pointerDownState.origin.x,
+              y: pointerDownState.origin.y,
+              width: DEFAULT_CONFIG.BUTTON.WIDTH,
+              height: DEFAULT_CONFIG.BUTTON.HEIGHT,
+              backgroundColor: DEFAULT_CONFIG.BUTTON.BACKGROUND_COLOR,
+              customData: {
+                type: activeTool.customType,
+              },
+              label: { text: DEFAULT_CONFIG.BUTTON.TEXT },
+            };
+            break;
           case UIElement.INPUT:
             customElement = {
               type: "rectangle",
               x: pointerDownState.origin.x,
               y: pointerDownState.origin.y,
-              width: 100,
-              height: 30,
+              width: DEFAULT_CONFIG.INPUT.WIDTH,
+              height: DEFAULT_CONFIG.INPUT.HEIGHT,
+              backgroundColor: DEFAULT_CONFIG.INPUT.BACKGROUND_COLOR,
               customData: {
                 type: activeTool.customType,
               },
@@ -72,13 +86,12 @@ export const ExcalidrawWrapper = () => {
               type: "text",
               x: pointerDownState.origin.x,
               y: pointerDownState.origin.y,
-              text: "link Text",
+              text: DEFAULT_CONFIG.LINK.TEXT,
               customData: {
                 type: activeTool.customType,
               },
               strokeColor: "#1971c2",
-              fontFamily: FONT_FAMILY["Comic Shanns"],
-              fontSize: 16,
+              fontSize: DEFAULT_CONFIG.LINK.TEXT_FONT_SIZE,
             };
             break;
           default:
