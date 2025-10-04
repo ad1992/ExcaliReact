@@ -11,7 +11,7 @@ import {
   splitIntoRows,
 } from "./utils";
 import type { ElementsMap } from "@excalidraw/excalidraw/element/types";
-import type { RowItem, TreeNode } from "./types";
+import type { RowItem } from "./types";
 
 export const useExcalidrawElementsToJSX = () => {
   const { elements } = useExcalidraw();
@@ -30,8 +30,8 @@ export const useExcalidrawElementsToJSX = () => {
   const frameStyle = computeFrameElementStyle(frameNode);
 
   const rows = splitIntoRows(frameNode.children);
-  console.log("rows", rows);
-  const { jsxElements } = processRows(rows, elementsMap, null);
+
+  const jsxElements = processRows(rows, elementsMap);
 
   return <div style={frameStyle}>{jsxElements}</div>;
 };
@@ -59,31 +59,22 @@ export const createRowJSX = (children: React.ReactNode, marginTop: number) => {
 
 export const processRows = (
   rows: Array<RowItem>,
-  elementsMap: ElementsMap,
-  prevElement: TreeNode | null
-): {
-  jsxElements: React.ReactNode[];
-  newLastProcessedElement: TreeNode | null;
-} => {
+  elementsMap: ElementsMap
+): React.ReactNode[] => {
   const jsxElements: React.ReactNode[] = [];
-  let lastProcessedElement = prevElement;
 
   for (const [index, row] of rows.entries()) {
     // Row can have prev element only if row has multiple elements and its not the first element of the row
     const rowJSXElements: React.ReactNode[] = [];
     const isSingleElementRow = row.length === 1;
-    lastProcessedElement = null;
+
     for (const [rowIndex, rowItem] of row.entries()) {
       const siblingElement = rowIndex === 0 ? null : row[rowIndex - 1];
 
       // Handle group node
       if (rowItem.type === "group") {
-        const groupRowStyle = computeGroupRowStyle(
-          rowItem,
-          lastProcessedElement
-        );
-        const { jsxElements: groupRowJSXElements, newLastProcessedElement } =
-          processRows(rowItem.rows, elementsMap, null);
+        const groupRowStyle = computeGroupRowStyle(rowItem, siblingElement);
+        const groupRowJSXElements = processRows(rowItem.rows, elementsMap);
         // Compute the margin left for the group row with respect to its sibling element in the same row
         const marginLeft = computeMarginLeftForElement(rowItem, siblingElement);
         groupRowStyle.marginLeft = marginLeft;
@@ -95,7 +86,6 @@ export const processRows = (
         );
         // Push the group row JSX to the current row JSX elements
         rowJSXElements.push(groupRowJSX);
-        lastProcessedElement = newLastProcessedElement;
         continue;
       } else {
         // For first element in the row, there is no sibling element since its the first element in the row
@@ -109,8 +99,6 @@ export const processRows = (
           continue;
         }
         rowJSXElements.push(jsxElement);
-
-        lastProcessedElement = rowItem;
       }
     }
 
@@ -124,5 +112,5 @@ export const processRows = (
       jsxElements.push(parentRow);
     }
   }
-  return { jsxElements, newLastProcessedElement: lastProcessedElement };
+  return jsxElements;
 };
