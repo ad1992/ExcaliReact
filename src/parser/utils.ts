@@ -101,7 +101,6 @@ export const computeFrameElementStyle = (
     width: normalizedElement.width,
     height: normalizedElement.height,
     padding: `${padding.top}px ${padding.right}px ${padding.bottom}px ${padding.left}px`,
-    border: `${normalizedElement.strokeWidth}px solid ${normalizedElement.strokeColor}`,
   };
 };
 /**
