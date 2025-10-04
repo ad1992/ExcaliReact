@@ -5,7 +5,9 @@ import { VERTICAL_ALIGN } from "../excalidraw-wrapper/constants";
 import { FONT_FAMILY } from "@excalidraw/excalidraw";
 import type { GroupNode, RowItem, TreeNode, TreeNodeElement } from "./types";
 import { ROW_THRESHOLD_GAP } from "../constants";
-
+import prettier from "prettier/standalone";
+import babelParser from "prettier/plugins/babel";
+import parserEstree from "prettier/plugins/estree";
 /**
  * Compute the style of an Excalidraw element.
  * @param element - The Excalidraw element to compute the style for.
@@ -349,4 +351,27 @@ export const computeMarginLeftForElement = (
   }
   // For first element in the row, there is no sibling element since its the first element in the row hence return the x coordinate of the element as its coordinates are with respect to the parent element
   return element.x;
+};
+
+/**
+ * Format the code using prettier.
+ * @param code - The code to format
+ * @returns The formatted code
+ */
+export const formatCode = async (code: string): Promise<string> => {
+  try {
+    const formattedCode = await prettier.format(code, {
+      parser: "babel",
+      plugins: [babelParser, parserEstree],
+      semi: true,
+      singleQuote: true,
+      tabWidth: 2,
+      printWidth: 80,
+      arrowParens: "always",
+    });
+    return formattedCode;
+  } catch (error) {
+    console.error("Prettier formatting failed", error);
+    return code;
+  }
 };

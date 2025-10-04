@@ -8,11 +8,13 @@ import {
   computeGroupRowStyle,
   computeMarginLeftForElement,
   computeRowBoundingBox,
+  formatCode,
   splitIntoRows,
 } from "./utils";
 import type { ElementsMap } from "@excalidraw/excalidraw/element/types";
 import type { RowItem } from "./types";
 import { nanoid } from "nanoid";
+import { useEffect, useState } from "react";
 
 export const useExcalidrawElementsToJSX = () => {
   const { elements } = useExcalidraw();
@@ -55,10 +57,19 @@ export const useExcalidrawToJSXString = () => {
     showFunctions: true,
     functionValue: (fn) => fn.toString(),
   });
-  return `export const ExcalidrawToReact = () => {
-  return ${jsxComp}
-};
-`;
+
+  const [formattedCode, setFormattedCode] = useState<string>("");
+  useEffect(() => {
+    const rawCode = `export const ExcalidrawToReact = () => {
+      return (
+        ${jsxComp}
+        );
+      };
+      `;
+    formatCode(rawCode).then(setFormattedCode);
+  }, [jsxComp]);
+
+  return formattedCode;
 };
 
 export const createRowJSX = (children: React.ReactNode, marginTop: number) => {
