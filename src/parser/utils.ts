@@ -134,7 +134,7 @@ const stringify = (value: unknown) => {
  * @returns The style string.
  * eg. { width: 100, height: 100, backgroundColor: "red" } -> { width: 100, height: 100, backgroundColor: "red" }
  */
-const createStyleString = (style: CSSProperties): string => {
+export const createStyleString = (style: CSSProperties): string => {
   const styleEntries = Object.entries(style)
     .filter(([, value]) => value !== undefined && value !== null)
     .map(([key, value]) => `${key}: ${stringify(value)}`);
