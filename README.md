@@ -1,15 +1,15 @@
 # ExcaliReact
 
-> **Experimental: Transform your Excalidraw sketches into React components!**
+> **Experimental: Canvas to Code - Transform your Excalidraw sketches into React components!**
 > ![Status](https://img.shields.io/badge/Status-Prototype%20%7C%20In%20Progress-orange?style=for-the-badge)
 
-> A fun, experimental project that bridges the gap between design and development. Sketch your ideas in Excalidraw and watch them transform into React components.
+> A fun, experimental project that bridges the gap between design and development. Sketch your ideas in Excalidraw and watch them transform to React Components.
 
 # Why
 
 As a long term user and maintainer of Excalidraw, I always use Excalidraw for any mockups or diagrams and want to turn them into code.
 
-I wanted to go deeper into how to transform design to code and hence started on this experimental project to achieve the same. Currently this project is heavily in progress.
+I wanted to go deeper into how to transform canvas to code and hence started on this experimental project to achieve the same. Currently this project is heavily in progress.
 
 ## 🎯 Features
 
@@ -72,7 +72,7 @@ pnpm lint
 ### Tech Stack
 
 - **React 19** - Latest React with concurrent features
-- **Excalidraw** - Virtual whiteboard for sketching hand-drawn like diagrams
+- **Excalidraw** - Canvas based editot for sketching hand-drawn like diagrams
 - **TypeScript** - Type-safe development
 - **Vite** - Lightning-fast build tool
 - **Tailwind CSS** - Utility-first styling

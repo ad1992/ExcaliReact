@@ -51,8 +51,8 @@ function App() {
           <span className="bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
             ExcaliReact
           </span>
-          <span className="text-base font-normal text-gray-500 ml-3 border-l border-gray-300 pl-3">
-            Sketch to React
+          <span className="text-xl font-normal text-gray-500 ml-3 border-l border-gray-300 pl-3">
+            Canvas to React
           </span>
         </h1>
       </header>
