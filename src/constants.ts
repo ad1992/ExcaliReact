@@ -1,23 +1,40 @@
+import { UIElement } from "./types";
+
 export const ROW_THRESHOLD_GAP = 10;
 
 export const DEFAULT_CONFIG = {
   BUTTON: {
-    WIDTH: 165,
-    HEIGHT: 40,
-    BACKGROUND_COLOR: "#4dabf7",
-    TEXT: "Sample Button",
-    TEXT_COLOR: "#1e1e1e",
-    TEXT_FONT_SIZE: 16,
+    width: 165,
+    height: 40,
+    backgroundColor: "#4c6ef5",
+    label: {
+      text: "Sample Button",
+      fontSize: 16,
+      strokeColor: "#ffffff",
+    },
+    strokeWidth: 2,
+    roughness: 1,
+    strokeColor: "#4263eb",
+    customData: {
+      type: UIElement.BUTTON,
+    },
   },
   LINK: {
-    TEXT: "Sample Link",
-    TEXT_COLOR: "#1e1e1e",
-    TEXT_FONT_SIZE: 16,
+    text: "Sample Link",
+    fontSize: 16,
+    strokeColor: "#4263eb",
+    customData: {
+      type: UIElement.LINK,
+    },
   },
   INPUT: {
-    TEXT_FONT_SIZE: 16,
-    WIDTH: 165,
-    HEIGHT: 40,
-    BACKGROUND_COLOR: "#f1f3f5",
+    fontSize: 16,
+    width: 165,
+    height: 40,
+    backgroundColor: "#f1f3f5",
+    strokeWidth: 1,
+    customData: {
+      type: UIElement.INPUT,
+    },
   },
 };

@@ -56,42 +56,26 @@ export const ExcalidrawWrapper = () => {
         switch (activeTool.customType) {
           case UIElement.BUTTON:
             customElement = {
+              ...DEFAULT_CONFIG.BUTTON,
               type: "rectangle",
               x: pointerDownState.origin.x,
               y: pointerDownState.origin.y,
-              width: DEFAULT_CONFIG.BUTTON.WIDTH,
-              height: DEFAULT_CONFIG.BUTTON.HEIGHT,
-              backgroundColor: DEFAULT_CONFIG.BUTTON.BACKGROUND_COLOR,
-              customData: {
-                type: activeTool.customType,
-              },
-              label: { text: DEFAULT_CONFIG.BUTTON.TEXT },
             };
             break;
           case UIElement.INPUT:
             customElement = {
+              ...DEFAULT_CONFIG.INPUT,
               type: "rectangle",
               x: pointerDownState.origin.x,
               y: pointerDownState.origin.y,
-              width: DEFAULT_CONFIG.INPUT.WIDTH,
-              height: DEFAULT_CONFIG.INPUT.HEIGHT,
-              backgroundColor: DEFAULT_CONFIG.INPUT.BACKGROUND_COLOR,
-              customData: {
-                type: activeTool.customType,
-              },
             };
             break;
           case UIElement.LINK:
             customElement = {
+              ...DEFAULT_CONFIG.LINK,
               type: "text",
               x: pointerDownState.origin.x,
               y: pointerDownState.origin.y,
-              text: DEFAULT_CONFIG.LINK.TEXT,
-              customData: {
-                type: activeTool.customType,
-              },
-              strokeColor: "#1971c2",
-              fontSize: DEFAULT_CONFIG.LINK.TEXT_FONT_SIZE,
             };
             break;
 
