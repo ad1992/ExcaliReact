@@ -8,12 +8,9 @@ button {
   font-family: "Excalifont", "Xiaolai", sans-serif, "Segoe UI Emoji";
 }
 
-.excalidraw .App-toolbar .ToolIcon_type_freedraw,
-.excalidraw .App-toolbar .ToolIcon_type_arrow,
-.excalidraw .App-toolbar .ToolIcon_type_text {
-  display: none !important;
-}
-
-.excalidraw .App-toolbar {
-  display: none;
+.excalidraw {
+  .App-toolbar,
+  .layer-ui__wrapper__top-right [title="Library"] {
+    display: none;
+  }
 }
