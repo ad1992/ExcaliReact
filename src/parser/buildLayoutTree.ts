@@ -29,7 +29,7 @@ export const buildLayoutTree = (
 
   const frame = elements.find((element) => element.type === "frame");
   if (!frame) {
-    alert("Frame not found");
+    console.error("Frame not found");
     return {};
   }
 

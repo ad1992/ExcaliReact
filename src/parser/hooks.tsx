@@ -25,7 +25,7 @@ export const useExcalidrawElementsToJSX = () => {
   const layoutTree = buildLayoutTree(elements);
   const frameNode = Object.values(layoutTree)[0];
 
-  if (frameNode.type !== "frame") {
+  if (!frameNode || frameNode.type !== "frame") {
     console.error("Frame not found");
     return null;
   }

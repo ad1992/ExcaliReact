@@ -1,6 +1,6 @@
 import "./App.css";
 import "@excalidraw/excalidraw/index.css";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { CodeEditor } from "./CodeEditor";
 
 import { ExcalidrawWrapper } from "./excalidraw-wrapper/ExcalidrawWrapper";
