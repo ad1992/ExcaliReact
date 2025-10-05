@@ -72,10 +72,10 @@ pnpm lint
 ### Tech Stack
 
 - **React 19** - Latest React with concurrent features
-- **Excalidraw** - Canvas based editot for sketching hand-drawn like diagrams
+- **Excalidraw** - Canvas based editor for sketching hand-drawn like diagrams
 - **TypeScript** - Type-safe development
-- **Vite** - Lightning-fast build tool
-- **Tailwind CSS** - Utility-first styling
+- **Vite** - Fast build tool
+- **Tailwind CSS** - Utility first CSS framework
 - **Monaco Editor** - VS Code editor in the browser
 
 ## 💖 Made with Love
