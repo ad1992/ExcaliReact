@@ -5,9 +5,11 @@
 
 > A fun, experimental project that bridges the gap between design and development. Sketch your ideas in Excalidraw and watch them transform to React Components.
 
+https://github.com/user-attachments/assets/76ac6f89-7cfd-4c91-b1e8-711daaec2038
+
 # Why
 
-As a long term user and maintainer of Excalidraw, I always use Excalidraw for any mockups or diagrams and want to turn them into code.
+As a long-term user and maintainer of Excalidraw, I always use Excalidraw for any mockups or diagrams and want to turn them into code.
 
 I wanted to go deeper into how to transform canvas to code and hence started on this experimental project to achieve the same. Currently this project is heavily in progress.
 
