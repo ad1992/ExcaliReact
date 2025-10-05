@@ -57,7 +57,7 @@ export const excalidrawElementToHTML = (
             style={baseStyle}
             name={boundTextElement?.text}
             onClick={(event: React.MouseEvent<HTMLButtonElement>) =>
-              alert(`You clicked on ${event.currentTarget.name}`)
+              alert(`You clicked on ${event.currentTarget.name} button`)
             }
           >
             <span key={boundTextElement?.id} style={boundTextBaseStyle}>
@@ -67,15 +67,28 @@ export const excalidrawElementToHTML = (
         );
       }
       case "input":
-        return <input key={element.id} style={baseStyle} id={element.id} />;
+        return (
+          <input
+            key={element.id}
+            style={{ ...baseStyle, padding: "5px" }}
+            id={element.id}
+          />
+        );
       case "link":
         if (element.type !== "text") return null;
         return (
           <a
             key={element.id}
             style={baseStyle}
-            href={element.text}
+            href={"#"}
             target="_blank"
+            rel="noopener noreferrer"
+            onClick={(event: React.MouseEvent<HTMLAnchorElement>) => {
+              event.preventDefault();
+              alert(
+                `You clicked on ${event.currentTarget.text} link. The link will be editable soon!`
+              );
+            }}
           >
             {element.text}
           </a>
