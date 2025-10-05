@@ -251,6 +251,12 @@ export const computeRowBoundingBox = (row: RowItem | null) => {
   return { minX, minY, maxX, maxY };
 };
 
+/**
+ * Compute the padding for a frame. The padding is computed based on the bounding box of the frame children.
+ * @param frame - The frame to compute the padding for.
+ * @param elements - The elements to compute the padding for.
+ * @returns The padding for the frame.
+ */
 export const computeFramePadding = (
   frame: NonDeletedExcalidrawElement,
   elements: readonly NonDeletedExcalidrawElement[]
@@ -263,10 +269,10 @@ export const computeFramePadding = (
   // Compute the minX, minY, maxX, maxY of the frame children
   const boundingBox = computeFrameNodeBoundingBox(frame, elements);
   return {
-    left: boundingBox.minX - frame.x,
-    top: boundingBox.minY - frame.y,
-    right: frame.x + frame.width - boundingBox.maxX,
-    bottom: frame.y + frame.height - boundingBox.maxY,
+    left: roundOffToDecimals(boundingBox.minX - frame.x),
+    top: roundOffToDecimals(boundingBox.minY - frame.y),
+    right: roundOffToDecimals(frame.x + frame.width - boundingBox.maxX),
+    bottom: roundOffToDecimals(frame.y + frame.height - boundingBox.maxY),
   };
 };
 
@@ -347,10 +353,12 @@ export const computeMarginLeftForElement = (
   siblingElement: TreeNode | null
 ) => {
   if (siblingElement) {
-    return element.x - (siblingElement.x + siblingElement.width);
+    return roundOffToDecimals(
+      element.x - (siblingElement.x + siblingElement.width)
+    );
   }
   // For first element in the row, there is no sibling element since its the first element in the row hence return the x coordinate of the element as its coordinates are with respect to the parent element
-  return element.x;
+  return roundOffToDecimals(element.x);
 };
 
 /**
@@ -374,4 +382,14 @@ export const formatCode = async (code: string): Promise<string> => {
     console.error("Prettier formatting failed", error);
     return code;
   }
+};
+
+/**
+ * Round off the value to the given number of decimals. By default it rounds off to 2 decimals.
+ * @param value - The value to round off to decimals
+ * @param decimals - The number of decimals to round off to
+ * @returns
+ */
+export const roundOffToDecimals = (value: number, decimals: number = 2) => {
+  return Math.round(value * 10 ** decimals) / 10 ** decimals;
 };
