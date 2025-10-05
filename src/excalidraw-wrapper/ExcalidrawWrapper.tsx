@@ -58,24 +58,24 @@ export const ExcalidrawWrapper = () => {
             customElement = {
               ...DEFAULT_CONFIG.BUTTON,
               type: "rectangle",
-              x: pointerDownState.origin.x,
-              y: pointerDownState.origin.y,
+              x: pointerDownState.origin.x - DEFAULT_CONFIG.BUTTON.width / 2,
+              y: pointerDownState.origin.y - DEFAULT_CONFIG.BUTTON.height / 2,
             };
             break;
           case UIElement.INPUT:
             customElement = {
               ...DEFAULT_CONFIG.INPUT,
               type: "rectangle",
-              x: pointerDownState.origin.x,
-              y: pointerDownState.origin.y,
+              x: pointerDownState.origin.x - DEFAULT_CONFIG.INPUT.width / 2,
+              y: pointerDownState.origin.y - DEFAULT_CONFIG.INPUT.height / 2,
             };
             break;
           case UIElement.LINK:
             customElement = {
               ...DEFAULT_CONFIG.LINK,
               type: "text",
-              x: pointerDownState.origin.x,
-              y: pointerDownState.origin.y,
+              x: pointerDownState.origin.x - DEFAULT_CONFIG.LINK.width / 2,
+              y: pointerDownState.origin.y - DEFAULT_CONFIG.LINK.height / 2,
             };
             break;
 

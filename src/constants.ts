@@ -26,11 +26,13 @@ export const DEFAULT_CONFIG = {
     customData: {
       type: UIElement.LINK,
     },
+    width: 87,
+    height: 20,
   },
   INPUT: {
     fontSize: 16,
     width: 165,
-    height: 40,
+    height: 30,
     backgroundColor: "#f1f3f5",
     strokeWidth: 1,
     customData: {
