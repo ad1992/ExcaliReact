@@ -60,7 +60,7 @@ export const useExcalidrawToJSXString = () => {
 
   const [formattedCode, setFormattedCode] = useState<string>("");
   useEffect(() => {
-    const rawCode = `export const ExcalidrawToReact = () => {
+    const rawCode = `export const ExcaliReactApp = () => {
       return (
         ${jsxComp}
         );
