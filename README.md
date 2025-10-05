@@ -7,6 +7,8 @@
 
 https://github.com/user-attachments/assets/76ac6f89-7cfd-4c91-b1e8-711daaec2038
 
+Try it out [here](https://excalireact.vercel.app/)
+
 # Why
 
 As a long-term user and maintainer of Excalidraw, I always use Excalidraw for any mockups or diagrams and want to turn them into code.
