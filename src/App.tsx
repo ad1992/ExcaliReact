@@ -46,8 +46,8 @@ function App() {
   return (
     <div className="h-screen flex flex-col bg-gray-50">
       <header className="bg-white border-b border-gray-200 px-8 py-3 shadow-sm">
-        <h1 className="text-2xl font-bold text-center excaliFont">
-          <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        <h1 className="text-3xl font-bold text-center excaliFont">
+          <span className="bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
             ExcaliReact
           </span>
           <span className="text-base font-normal text-gray-500 ml-3 border-l border-gray-300 pl-3">
