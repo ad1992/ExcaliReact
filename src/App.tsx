@@ -4,7 +4,6 @@ import { useLayoutEffect, useRef, useState } from "react";
 import { CodeEditor } from "./CodeEditor";
 
 import { ExcalidrawWrapper } from "./excalidraw-wrapper/ExcalidrawWrapper";
-import { useExcalidrawElementsToJSX } from "./parser/hooks";
 import {
   CodeIcon,
   FullScreenIcon,
@@ -13,6 +12,7 @@ import {
 } from "./assets/Icons";
 import { ReactIcon } from "./assets/ReactLogo";
 import { useExcalidraw } from "./excalidraw-wrapper/hooks";
+import { CodePreview } from "./CodePreview";
 
 const SCROLL_TO_CONTENT_ANIMATION_DURATION = 500;
 
@@ -21,7 +21,6 @@ function App() {
   const [showExcaliReactPanel, setShowExcaliReactPanel] =
     useState<boolean>(true);
 
-  const CodePreview = useExcalidrawElementsToJSX();
   const { excalidrawAPI } = useExcalidraw();
 
   const prevShowExcaliReactPanelRef = useRef<boolean>(null);
@@ -114,8 +113,8 @@ function App() {
                   </button>
                 </div>
               </div>
-              <div className="flex-1 overflow-auto p-4 relative ">
-                {showCodePanel ? <CodeEditor /> : CodePreview}
+              <div className="flex flex-1 items-center justify-center overflow-auto p-4 relative ">
+                {showCodePanel ? <CodeEditor /> : <CodePreview />}
               </div>
             </div>
           </>

@@ -24,13 +24,14 @@ export const buildLayoutTree = (
   elements: readonly NonDeletedExcalidrawElement[]
 ): Record<string, TreeNode> => {
   if (elements.length === 0) {
-    return {};
+    throw new Error("No elements found");
   }
 
   const frame = elements.find((element) => element.type === "frame");
   if (!frame) {
-    console.error("Frame not found");
-    return {};
+    throw new Error(
+      "Frame not found. Please create a frame to contain your elements."
+    );
   }
 
   const rootNodes: Record<string, TreeNode> = {};

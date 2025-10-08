@@ -40,11 +40,11 @@ export const CodeEditor = () => {
       "file:///node_modules/@types/react/index.d.ts"
     );
   };
-  const jsxCode = useExcalidrawToJSXString();
+  const { jsxString, error } = useExcalidrawToJSXString();
 
   const handleCopyCode = async () => {
     try {
-      await navigator.clipboard.writeText(jsxCode);
+      await navigator.clipboard.writeText(jsxString);
       setToast({
         type: "success",
         message: "Code copied to clipboard successfully",
@@ -69,12 +69,14 @@ export const CodeEditor = () => {
   }, [toast]);
 
   if (!excalidrawAPI) return null;
-
+  if (error) {
+    return <div className="text-red-500">{error}</div>;
+  }
   return (
-    <div className="relative h-full">
+    <div className="relative h-full w-full">
       <Editor
         language="typescript"
-        value={jsxCode}
+        value={jsxString}
         height="100%"
         theme="vs-dark"
         onMount={handleEditorDidMount}

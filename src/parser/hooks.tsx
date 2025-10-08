@@ -19,48 +19,61 @@ import { useEffect, useState } from "react";
 
 export const useExcalidrawElementsToJSX = () => {
   const { elements } = useExcalidraw();
-  if (elements.length === 0) {
-    return null;
+
+  try {
+    const elementsMap = getElementsMap(elements);
+    const layoutTree = buildLayoutTree(elements);
+    const frameNode = Object.values(layoutTree)[0];
+
+    if (!frameNode || frameNode.type !== "frame") {
+      throw new Error(
+        "Frame not found. Please create a frame to contain your elements."
+      );
+    }
+
+    const frameStyle = computeFrameElementStyle(frameNode);
+
+    const rows = splitIntoRows(frameNode.children);
+
+    const jsxElements = processRows(rows, elementsMap);
+
+    return {
+      jsx: (
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <div style={frameStyle}>{jsxElements}</div>
+        </div>
+      ),
+      error: null,
+    };
+  } catch (error) {
+    return {
+      jsx: null,
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
   }
-  const elementsMap = getElementsMap(elements);
-  const layoutTree = buildLayoutTree(elements);
-  const frameNode = Object.values(layoutTree)[0];
-
-  if (!frameNode || frameNode.type !== "frame") {
-    console.error("Frame not found");
-    return null;
-  }
-
-  const frameStyle = computeFrameElementStyle(frameNode);
-
-  const rows = splitIntoRows(frameNode.children);
-
-  const jsxElements = processRows(rows, elementsMap);
-
-  return (
-    <div
-      style={{
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <div style={frameStyle}>{jsxElements}</div>
-    </div>
-  );
 };
 
 export const useExcalidrawToJSXString = () => {
-  const jsx = useExcalidrawElementsToJSX();
-  const jsxComp = reactElementToJSXString(jsx, {
-    showFunctions: true,
-    functionValue: (fn) => fn.toString(),
-  });
+  const { jsx, error } = useExcalidrawElementsToJSX();
 
   const [formattedCode, setFormattedCode] = useState<string>("");
   useEffect(() => {
+    if (!jsx || error) {
+      setFormattedCode("");
+      return;
+    }
+    const jsxComp = reactElementToJSXString(jsx, {
+      showFunctions: true,
+      functionValue: (fn) => fn.toString(),
+    });
     const rawCode = `export const ExcaliReactApp = () => {
       return (
         ${jsxComp}
@@ -68,9 +81,9 @@ export const useExcalidrawToJSXString = () => {
       };
       `;
     formatCode(rawCode).then(setFormattedCode);
-  }, [jsxComp]);
+  }, [error, jsx]);
 
-  return formattedCode;
+  return { jsxString: formattedCode, error };
 };
 
 export const createRowJSX = (children: React.ReactNode, marginTop: number) => {
