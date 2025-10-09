@@ -88,7 +88,7 @@ pnpm lint
 
 New contributions are most welcome. This is an experimental project with plenty of room for innovation.
 
-**Before you start:**  Please open an issue and lets discuss :).
+**Before you start:** Please open an [issue](https://github.com/ad1992/ExcaliReact/issues) and lets discuss :).
 
 ## 💖 Made with Love
 
