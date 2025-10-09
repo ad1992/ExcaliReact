@@ -84,6 +84,12 @@ pnpm lint
 - **Tailwind CSS** - Utility first CSS framework
 - **Monaco Editor** - VS Code editor in the browser
 
+### 🤝 Contribution
+
+New contributions are most welcome. This is an experimental project with plenty of room for innovation.
+
+**Before you start:**  Please open an issue and lets discuss :).
+
 ## 💖 Made with Love
 
 Built as a fun experiment to explore the intersection of design and development.
