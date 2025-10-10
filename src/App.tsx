@@ -13,6 +13,7 @@ import {
 import { ReactIcon } from "./assets/ReactLogo";
 import { useExcalidraw } from "./excalidraw-wrapper/hooks";
 import { CodePreview } from "./CodePreview";
+import { ExperimentalBanner } from "./ExperimentalBanner";
 
 const SCROLL_TO_CONTENT_ANIMATION_DURATION = 500;
 
@@ -45,6 +46,7 @@ function App() {
   }, [excalidrawAPI, showExcaliReactPanel]);
   return (
     <div className="h-screen flex flex-col bg-gray-50">
+      <ExperimentalBanner />
       <header className="bg-white border-b border-gray-200 px-8 py-3 shadow-sm">
         <h1 className="text-3xl font-bold text-center excaliFont">
           <span className="bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
