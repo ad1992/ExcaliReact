@@ -39,16 +39,8 @@ export const useExcalidrawElementsToJSX = () => {
 
     return {
       jsx: (
-        <div
-          style={{
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <div style={frameStyle}>{jsxElements}</div>
+        <div id={`frame-${frameNode.id}`} style={frameStyle}>
+          {jsxElements}
         </div>
       ),
       error: null,
@@ -143,8 +135,9 @@ export const processRows = (
         rowJSXElements.push(jsxElement);
       }
     }
-
-    if (rowJSXElements.length > 0) {
+    if (rows.length === 1) {
+      jsxElements.push(rowJSXElements);
+    } else if (rowJSXElements.length > 0) {
       const prevRow = index === 0 ? null : rows[index - 1];
       const boundingBoxPrevRow = computeRowBoundingBox(prevRow);
       const boundingBoxCurrentRow = computeRowBoundingBox(row);
