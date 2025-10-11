@@ -49,7 +49,7 @@ function App() {
       <ExperimentalBanner />
       <header className="bg-white border-b border-gray-200 px-8 py-3 shadow-sm">
         <h1 className="text-3xl font-bold text-center excaliFont">
-          <span className="bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-purple-600 to-cyan-500 bg-clip-text text-transparent">
             ExcaliReact
           </span>
           <span className="text-xl font-normal text-gray-500 ml-3 border-l border-gray-300 pl-3">
