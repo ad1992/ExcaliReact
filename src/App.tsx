@@ -53,7 +53,7 @@ function App() {
     isDragging.current = true;
   };
 
-  const handleMouseMove = (e) => {
+  const handleMouseMove = (e: MouseEvent) => {
     if (!isDragging.current || !containerRef.current) return;
 
     const containerRect = containerRef.current.getBoundingClientRect();
