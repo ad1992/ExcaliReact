@@ -6,8 +6,8 @@ export const ExperimentalBanner: React.FC = () => {
       <div className="flex items-center justify-center gap-1">
         <span className="animate-pulse text-l">🧪</span>
         <span>
-          This is an <strong>experimental prototype</strong> - features may be
-          unstable. Found a bug or have feedback? Please submit them on
+          This is an <strong>experimental prototype</strong> - Desktop
+          recommended. Found a bug or have feedback? Please submit them on
         </span>
         <a
           href="https://github.com/ad1992/ExcaliReact/issues"
