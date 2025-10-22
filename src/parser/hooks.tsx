@@ -30,7 +30,7 @@ export const useExcalidrawElementsToJSX = () => {
   if (!selectedFrame) {
     return {
       jsx: null,
-      error: "please select a Element or frame to convert to JSX",
+      error: "Please select an Element or frame to convert to JSX",
     };
   }
   const selectedFrameElements = elements.filter(
