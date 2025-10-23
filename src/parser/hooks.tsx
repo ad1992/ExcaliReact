@@ -22,11 +22,15 @@ export const useExcalidrawElementsToJSX = () => {
   const appState = excalidrawAPI?.getAppState();
   const selectedElements = elements.filter(el => !!appState?.selectedElementIds?.[el.id]);
   const FrameId = selectedElements?.[0]?.frameId;
-  const selectedFrame = elements.find(
+  let selectedFrame = elements.find(
   el =>
     el.type === "frame" &&
     (el.id === FrameId || appState?.selectedElementIds?.[el.id])
 );
+if (!selectedFrame) {
+    // Fallback: automatically select the first non-null frame in the elements list
+    selectedFrame = elements.find(el => el.type === "frame");
+  }
   if (!selectedFrame) {
     return {
       jsx: null,
