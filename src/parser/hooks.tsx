@@ -18,11 +18,32 @@ import { nanoid } from "nanoid";
 import { useEffect, useState } from "react";
 
 export const useExcalidrawElementsToJSX = () => {
-  const { elements } = useExcalidraw();
-
+  const { elements, excalidrawAPI } = useExcalidraw();
+  const appState = excalidrawAPI?.getAppState();
+  const selectedElements = elements.filter(el => !!appState?.selectedElementIds?.[el.id]);
+  const FrameId = selectedElements?.[0]?.frameId;
+  let selectedFrame = elements.find(
+  el =>
+    el.type === "frame" &&
+    (el.id === FrameId || appState?.selectedElementIds?.[el.id])
+);
+if (!selectedFrame) {
+    // Fallback: automatically select the first non-null frame in the elements list
+    selectedFrame = elements.find(el => el.type === "frame");
+  }
+  if (!selectedFrame) {
+    return {
+      jsx: null,
+      error: "Please select an Element or frame to convert to JSX",
+    };
+  }
+  const selectedFrameElements = elements.filter(
+  (el) => el.frameId === selectedFrame?.id
+    );
+  selectedFrameElements.push(selectedFrame!);
   try {
-    const elementsMap = getElementsMap(elements);
-    const layoutTree = buildLayoutTree(elements);
+    const elementsMap = getElementsMap(selectedFrameElements);
+    const layoutTree = buildLayoutTree(selectedFrameElements);
     const frameNode = Object.values(layoutTree)[0];
 
     if (!frameNode || frameNode.type !== "frame") {
@@ -48,7 +69,7 @@ export const useExcalidrawElementsToJSX = () => {
   } catch (error) {
     return {
       jsx: null,
-      error: error instanceof Error ? error.message : "Unknown error",
+      error: error instanceof Error ? `useExcalidrawElementsToJSX: ${error.message}` : "Unknown error",
     };
   }
 };
