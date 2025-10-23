@@ -38,7 +38,7 @@ function App() {
       // Push the scrollToContent to the next tick to avoid the layout shift due to transition when showExcaliReactPanel is updated
       setTimeout(() => {
         excalidrawAPI.scrollToContent(undefined, {
-          animate: true,
+          animate: false,
           duration: SCROLL_TO_CONTENT_ANIMATION_DURATION,
         });
       }, 0);
