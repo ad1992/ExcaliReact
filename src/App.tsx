@@ -21,10 +21,14 @@ function App() {
   const [showCodePanel, setShowCodePanel] = useState<boolean>(false);
   const [showExcaliReactPanel, setShowExcaliReactPanel] =
     useState<boolean>(true);
+  const [dividerPosition, setDividerPosition] = useState<number>(50); // percentage
 
   const { excalidrawAPI } = useExcalidraw();
 
-  const prevShowExcaliReactPanelRef = useRef<boolean>(null);
+  const prevShowExcaliReactPanelRef = useRef<boolean | null>(null);
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isDragging = useRef<boolean>(false);
 
   const handlePreviewPanel = () => {
     prevShowExcaliReactPanelRef.current = showExcaliReactPanel;
@@ -44,6 +48,26 @@ function App() {
       }, 0);
     }
   }, [excalidrawAPI, showExcaliReactPanel]);
+  // Divider logic
+  const handleMouseDown = () => {
+    isDragging.current = true;
+  };
+
+  const handleMouseMove = (e:  React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (!isDragging.current || !containerRef.current) return;
+
+    const containerRect = containerRef.current.getBoundingClientRect();
+    const newDividerPosition =
+      ((e.clientX - containerRect.left) / containerRect.width) * 100;
+
+    if (newDividerPosition > 10 && newDividerPosition < 90) {
+      setDividerPosition(newDividerPosition);
+    }
+  };
+
+  const handleMouseUp = () => {
+    isDragging.current = false;
+  };
   return (
     <div className="h-screen flex flex-col bg-gray-50">
       <ExperimentalBanner />
@@ -57,11 +81,19 @@ function App() {
           </span>
         </h1>
       </header>
-      <div className="flex-1 flex">
+      <div
+        // className="flex-1 flex"
+        ref={containerRef}
+        className="flex-1 flex overflow-hidden select-none"
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp}
+      >
         <div
-          className={`flex flex-col bg-white border-r border-gray-200 ${
-            showExcaliReactPanel ? "w-1/2" : "w-full"
-          }`}
+          className={`flex flex-col bg-white border-r border-gray-200 transition-all duration-100`}
+          style={{
+            width: showExcaliReactPanel ? `${dividerPosition}%` : "100%",
+          }}
         >
           <div className="bg-gray-50 border-b border-gray-200 px-6 py-4 flex justify-between items-center">
             <h2 className="text-l font-semibold text-gray-700">
@@ -87,9 +119,16 @@ function App() {
             <ExcalidrawWrapper />
           </div>
         </div>
+        <div
+          onMouseDown={handleMouseDown}
+          className="w-1 bg-gray-400 cursor-col-resize hover:bg-gray-600 transition-colors"
+        />
         {showExcaliReactPanel && (
           <>
-            <div className="w-1/2 flex flex-col bg-white border-r border-gray-200">
+            <div
+              className="flex flex-col bg-white border-r border-gray-200"
+              style={{ width: `${100 - dividerPosition}%` }}
+            >
               <div className="bg-gray-50 border-b border-gray-200 px-6 py-4 flex justify-between items-center">
                 <h2 className="text-l font-semibold text-gray-700">
                   ExcaliReact App

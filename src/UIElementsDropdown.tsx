@@ -67,7 +67,7 @@ export const UIElementsDropdown = ({
         UI Elements
       </button>
       {showUiElements && (
-        <div className="absolute bottom-full left-0 mt-2 w-48 bg-white rounded-md shadow-sm bg-gray-50">
+        <div className="absolute bottom-full left-0 mt-2 w-48 rounded-md shadow-sm bg-gray-50">
           {UIElements.map((uiElement) => (
             <button
               key={uiElement.value}
