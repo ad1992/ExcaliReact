@@ -12,13 +12,15 @@ import {
   roundOffToDecimals,
   splitIntoRows,
 } from "./utils";
-import type { ElementsMap } from "@excalidraw/excalidraw/element/types";
+import type { ElementsMap, Theme } from "@excalidraw/excalidraw/element/types";
 import type { RowItem } from "./types";
 import { nanoid } from "nanoid";
 import { useEffect, useState } from "react";
 
 export const useExcalidrawElementsToJSX = () => {
-  const { elements } = useExcalidraw();
+  const { elements, excalidrawAPI } = useExcalidraw();
+  const app = excalidrawAPI?.getAppState()
+  const theme = app?.theme
 
   try {
     const elementsMap = getElementsMap(elements);
@@ -31,11 +33,11 @@ export const useExcalidrawElementsToJSX = () => {
       );
     }
 
-    const frameStyle = computeFrameElementStyle(frameNode);
+    const frameStyle = computeFrameElementStyle(frameNode, theme);
 
     const rows = splitIntoRows(frameNode.children);
 
-    const jsxElements = processRows(rows, elementsMap);
+    const jsxElements = processRows(rows, elementsMap, theme);
 
     return {
       jsx: (
@@ -93,7 +95,8 @@ export const createRowJSX = (children: React.ReactNode, marginTop: number) => {
 
 export const processRows = (
   rows: Array<RowItem>,
-  elementsMap: ElementsMap
+  elementsMap: ElementsMap,
+  theme: Theme | undefined
 ): React.ReactNode[] => {
   const jsxElements: React.ReactNode[] = [];
 
@@ -108,7 +111,7 @@ export const processRows = (
       // Handle group node
       if (rowItem.type === "group") {
         const groupRowStyle = computeGroupRowStyle(rowItem);
-        const groupRowJSXElements = processRows(rowItem.rows, elementsMap);
+        const groupRowJSXElements = processRows(rowItem.rows, elementsMap, theme);
         // Compute the margin left for the group row with respect to its sibling element in the same row
         const marginLeft = computeMarginLeftForElement(rowItem, siblingElement);
         groupRowStyle.marginLeft = marginLeft;
@@ -127,7 +130,8 @@ export const processRows = (
           rowItem,
           elementsMap,
           siblingElement,
-          isSingleElementRow
+          isSingleElementRow,
+          theme
         );
         if (!jsxElement) {
           continue;

@@ -1,10 +1,10 @@
-import type { NonDeletedExcalidrawElement } from "@excalidraw/excalidraw/element/types";
+import type { NonDeletedExcalidrawElement, Theme } from "@excalidraw/excalidraw/element/types";
 import { getCornerRadius, getFontString } from "../excalidraw-wrapper/utils";
 import type { CSSProperties } from "react";
 import { VERTICAL_ALIGN } from "../excalidraw-wrapper/constants";
 import { FONT_FAMILY } from "@excalidraw/excalidraw";
 import type { GroupNode, RowItem, TreeNode, TreeNodeElement } from "./types";
-import { ROW_THRESHOLD_GAP } from "../constants";
+import { ROW_THRESHOLD_GAP, THEME_FILTER } from "../constants";
 import prettier from "prettier/standalone";
 import babelParser from "prettier/plugins/babel";
 import parserEstree from "prettier/plugins/estree";
@@ -28,7 +28,8 @@ import parserEstree from "prettier/plugins/estree";
  * // { width: 100, height: 100, backgroundColor: "red", border: "1px solid black", borderRadius: 0 }
  */
 export const computeExcalidrawElementStyle = (
-  element: NonDeletedExcalidrawElement
+  element: NonDeletedExcalidrawElement,
+  theme?: Theme
 ): CSSProperties => {
   const borderRadius = getCornerRadius(
     Math.min(element.width, element.height),
@@ -40,6 +41,7 @@ export const computeExcalidrawElementStyle = (
     backgroundColor: element.backgroundColor,
     border: `${element.strokeWidth}px ${element.strokeStyle} ${element.strokeColor}`,
     borderRadius,
+    filter: theme === "dark" ? THEME_FILTER : "none",
   };
   switch (element.type) {
     case "rectangle":
@@ -65,7 +67,7 @@ export const computeExcalidrawElementStyle = (
 };
 
 export const computeBoundTextElementStyle = (
-  element: NonDeletedExcalidrawElement
+  element: NonDeletedExcalidrawElement,
 ) => {
   // Destruct left, top, position, width, height as they aren't needed for bound text element
   // eslint-disable-next-line
@@ -80,17 +82,20 @@ export const computeBoundTextElementStyle = (
 };
 
 export const computeContainerElementStyle = (
-  element: NonDeletedExcalidrawElement
+  element: NonDeletedExcalidrawElement,
+  theme: Theme | undefined
 ) => {
-  const baseStyle = computeExcalidrawElementStyle(element);
+  const baseStyle = computeExcalidrawElementStyle(element, theme);
   baseStyle.display = "flex";
   baseStyle.alignItems = "center";
   baseStyle.justifyContent = "center";
+  baseStyle.filter = theme === "dark" ? THEME_FILTER : "none";
   return baseStyle;
 };
 
 export const computeFrameElementStyle = (
-  element: TreeNodeElement
+  element: TreeNodeElement,
+  theme: Theme | undefined
 ): CSSProperties => {
   const normalizedElement = normalizeFrameElement(element);
   const { padding = { left: 0, top: 0, right: 0, bottom: 0 } } =
@@ -101,6 +106,7 @@ export const computeFrameElementStyle = (
     width: normalizedElement.width,
     height: normalizedElement.height,
     padding: `${padding.top}px ${padding.right}px ${padding.bottom}px ${padding.left}px`,
+    background: theme === "dark" ? "#000" : "none",
   };
 };
 /**

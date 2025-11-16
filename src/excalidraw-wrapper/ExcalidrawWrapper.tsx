@@ -7,12 +7,13 @@ import { UIElementsDropdown } from "../UIElementsDropdown";
 import type { ExcalidrawElementSkeleton } from "@excalidraw/excalidraw/data/transform";
 import type {
   ActiveTool,
+  AppState,
   PointerDownState,
 } from "@excalidraw/excalidraw/types";
 import { initialData } from "../initialData";
 import { useExcalidraw } from "./hooks";
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { NonDeletedExcalidrawElement } from "@excalidraw/excalidraw/element/types";
+import type { NonDeletedExcalidrawElement, Theme } from "@excalidraw/excalidraw/element/types";
 import { UIElement } from "../types";
 import { DEFAULT_CONFIG } from "../constants";
 
@@ -23,6 +24,8 @@ export const ExcalidrawWrapper = () => {
     null
   );
   const currentVersionNonceRef = useRef<number>(0);
+  
+  let theme = excalidrawAPI?.getAppState().theme
 
   useEffect(() => {
     currentVersionNonceRef.current = elements.reduce((acc, element) => {
@@ -31,8 +34,10 @@ export const ExcalidrawWrapper = () => {
   }, [elements]);
 
   const handleOnChange = useCallback(
-    (updatedElements: readonly NonDeletedExcalidrawElement[]) => {
+    (updatedElements: readonly NonDeletedExcalidrawElement[], appState: AppState) => {
       updatedElements = updatedElements.filter((element) => !element.isDeleted);
+      const themeChanged = appState.theme !== theme
+      theme = appState.theme
 
       if (updatedElements.length !== elements.length) {
         setElements(updatedElements);
@@ -41,12 +46,13 @@ export const ExcalidrawWrapper = () => {
       const updatedVersionNonce = updatedElements.reduce((acc, element) => {
         return acc + element.versionNonce;
       }, 0);
-      if (updatedVersionNonce === currentVersionNonceRef.current) return;
+
+      
+      if (updatedVersionNonce === currentVersionNonceRef.current && !themeChanged) return;
       setElements(updatedElements);
     },
     [elements.length, setElements]
   );
-
   const onPointerDown = useCallback(
     (activeTool: ActiveTool, pointerDownState: PointerDownState) => {
       if (!selectedUIElement || !excalidrawAPI) return;
@@ -128,6 +134,7 @@ export const ExcalidrawWrapper = () => {
   );
 
   return (
+    
     <Excalidraw
       excalidrawAPI={(api) => setExcalidrawAPI(api)}
       onPointerDown={onPointerDown}
