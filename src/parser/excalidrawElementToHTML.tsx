@@ -1,4 +1,4 @@
-import type { ElementsMap } from "@excalidraw/excalidraw/element/types";
+import type { ElementsMap, Theme } from "@excalidraw/excalidraw/element/types";
 import {
   getBoundTextElement,
   getContainerElement,
@@ -22,7 +22,8 @@ export const excalidrawElementToHTML = (
   element: TreeNode,
   elementsMap: ElementsMap,
   prevElement: TreeNode | null,
-  isSingleElementRow: boolean
+  isSingleElementRow: boolean,
+  theme: Theme | undefined
 ): React.ReactNode => {
   // Don't process group nodes
   if (element.type === "group") {
@@ -33,8 +34,8 @@ export const excalidrawElementToHTML = (
     ? computeBoundTextElementStyle(boundTextElement)
     : {};
   const baseStyle = boundTextElement
-    ? computeContainerElementStyle(element)
-    : computeExcalidrawElementStyle(element);
+    ? computeContainerElementStyle(element, theme)
+    : computeExcalidrawElementStyle(element, theme);
 
   // Compute the margin left for the element with respect to its sibling element in the same row
 

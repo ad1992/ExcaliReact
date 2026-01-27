@@ -40,3 +40,4 @@ export const DEFAULT_CONFIG = {
     },
   },
 };
+export const THEME_FILTER = "invert(93%) hue-rotate(180deg)";

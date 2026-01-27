@@ -31,7 +31,6 @@ function App() {
 
     setShowExcaliReactPanel((showExcaliReactPanel) => !showExcaliReactPanel);
   };
-
   useLayoutEffect(() => {
     if (!excalidrawAPI) return;
     if (prevShowExcaliReactPanelRef.current !== showExcaliReactPanel) {
