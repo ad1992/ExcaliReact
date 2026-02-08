@@ -39,6 +39,7 @@ export const computeExcalidrawElementStyle = (
     height: element.height,
     backgroundColor: element.backgroundColor,
     border: `${element.strokeWidth}px ${element.strokeStyle} ${element.strokeColor}`,
+    opacity: `${element.opacity / 100}`,
     borderRadius,
   };
   switch (element.type) {
