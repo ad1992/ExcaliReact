@@ -9,7 +9,7 @@ https://github.com/user-attachments/assets/76ac6f89-7cfd-4c91-b1e8-711daaec2038
 
 ## 🪄 Try It Now
 
-[See ExcaliReact in Action](https://excalireact.app/)
+[See ExcaliReact in Action](https://excalireact.vercel.app)
 
 ## Why
 
